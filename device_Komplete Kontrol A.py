@@ -21,4 +21,3 @@ import nihia.core
 def OnInit():
     # Makes the handshake with NIHIA
     nihia.core.handShake()
-
