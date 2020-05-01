@@ -21,3 +21,6 @@ import nihia.core
 def OnInit():
     # Makes the handshake with NIHIA
     nihia.core.handShake()
+
+    # Prints a little help message
+    print("If you run into issues, run nihia.core.restartProtocol() to fix device freezing.")
