@@ -79,11 +79,11 @@ def restartProtocol():
     # Then activates it again
     handShake()
 
-
+    
 # Method for controlling the lighting on the buttons (for those who have idle/highlighted two state lights)
 # Examples of this kind of buttons are the PLAY or REC buttons, where the PLAY button alternates between low and high light and so on.
 # SHIFT buttons are also included in this range of buttons, but instead of low/high light they alternate between on/off light states.
-def buttonLightSet(buttonName, lightMode):
+def buttonSetLight(buttonName, lightMode):
     """ Method for controlling the lights on the buttons of the device. 
     
     buttonName -- Name of the button as shown in the device in caps. (PLAY, AUTO, REDO...)
@@ -91,37 +91,7 @@ def buttonLightSet(buttonName, lightMode):
     EXCEPTION: declare the Count-In button as COUNT_IN
     
     lightMode -- If set to 0, sets the first light mode of the button. If set to 1, sets the second light mode."""
-
-    # Based on the buttonName, finds the right DATA1 parameter (integer-formated) for the MIDI message
-    # In order to do this, rather than using an if statement I'm using a Python dictionary to emulate the logic of a switch-case statement
-    buttons = {
-        'PLAY':     10,
-        'RESTART':  11,
-        'REC':      12,
-        'COUNT_IN': 13,
-        'STOP':     14,
-        'CLEAR':    15,
-        'LOOP':     16,
-        'METRO':    17,
-        'TEMPO':    18,
-        'UNDO':     20,
-        'REDO':     21,
-        'QUANTIZE': 22,
-        'AUTO':     23,
-        'MASTER':   43,
-        'SOLO':     44,
-
-        # These are for the dot-lights found in the 4D Encoder of S-Series and certain Maschine devices.
-        # It should not make any effect on devices without these dot-lights.
-        # IT HASN'T BEEN TESTED IF THIS WORKS OR NOT
-
-        # Lights can't be set one by one because the DATA1 byte is the same for both buttons that control the same axis
-         'DPAD_X': 32,
-         'DPAD_Y': 30
-    }
     
-    # Gets the result from the button dictionary and assigns the button ID to a variable that will be then used to conform the message
-    button = buttons.get(buttonName, 0)
-
-    # Sends the MIDI message using dataOutInt
-    dataOutInt(button, lightMode)
+    # Gets the button ID from the button dictionary
+    # Then sends the MIDI message using dataOutInt
+    dataOutInt(buttonName, lightMode)
