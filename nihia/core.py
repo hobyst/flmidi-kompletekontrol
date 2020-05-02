@@ -4,7 +4,6 @@
 # features on Native Instruments' devices
 # Any device with this kind of features will make use of this script
 
-import fl
 import patterns
 import mixer
 import device
@@ -16,6 +15,32 @@ import playlist
 
 import midi
 import utils
+
+
+# Button name to button ID dictionary
+buttons = {
+    "PLAY": 0x10,
+    "RESTART": 0x11,
+    "REC": 0x12,
+    "COUNT_IN": 0x13,
+    "STOP": 0x14,
+    "CLEAR": 0x15,
+    "LOOP": 0x16,
+    "METRO": 0x17,
+    "TEMPO": 0x18,
+    
+    "UNDO": 0x20,
+    "REDO": 0x21,
+    "QUANTIZE": 0x22,
+    "AUTO": 0x23,
+
+    "MASTER": 0x43,
+    "SOLO": 0x44,
+
+    # Only on Maschine MK3, Maschine Studio and S-Series MK2 (TODO: NOT TESTED)
+    "DPAD_X": 0x32,
+    "DPAD_Y": 0x30
+}
 
 
 # Method to make talking to the device less annoying
@@ -33,18 +58,17 @@ def dataOut(data1, data2):
 
 
 # dataOut method but using int values
-def dataOutInt(data1, data2):
-    """ Variant of the dataOut method, but instead of having to use hex values you input int values
-    and these get automatically converted to hex, the message is composed and then sent to the device. 
+# DOESN'T WORK
+# def dataOutInt(data1, data2):
+    #     """ Variant of the dataOut method, but instead of having to use hex values you input int values
+    #     and these get automatically converted to hex, the message is composed and then sent to the device. 
     
-    data1, data2 -- Corresponding bytes of the MIDI message in integer format."""
+    #     data1, data2 -- Corresponding bytes of the MIDI message in integer format."""
 
-    # Converts the values from int to hex format
-    data1 = hex(data1)
-    data2 = hex(data2)
+    #     # Converts the values from int to hex format
 
-    # Composes the MIDI message and sends it
-    device.midiOutSysex(bytes([0xF0, 0xBF, data1, data2, 0x14, 0x0C, 1, 0xF7]))
+    #     # Composes the MIDI message and sends it
+    #     # device.midiOutSysex(bytes([0xF0, 0xBF, hex(data1), hex(data2), 0x14, 0x0C, 1, 0xF7]))
 
 
 # Method to enable the deep integration features on the device
@@ -57,6 +81,7 @@ def handShake():
     dataOut(0x01, 0x01)
 
     # TODO: Waits and reads the handshake confirmation message
+    OnMidi
     
 
 # Method to deactivate the deep integration mode. Intended to be executed on close.
@@ -86,12 +111,17 @@ def restartProtocol():
 def buttonSetLight(buttonName, lightMode):
     """ Method for controlling the lights on the buttons of the device. 
     
-    buttonName -- Name of the button as shown in the device in caps. (PLAY, AUTO, REDO...)
+    buttonName -- Name of the button as shown in the device in caps and enclosed in quotes. ("PLAY", "AUTO", "REDO"...)
 
     EXCEPTION: declare the Count-In button as COUNT_IN
     
     lightMode -- If set to 0, sets the first light mode of the button. If set to 1, sets the second light mode."""
-    
-    # Gets the button ID from the button dictionary
-    # Then sends the MIDI message using dataOutInt
-    dataOutInt(buttonName, lightMode)
+
+    #Light mode integer to light mode hex dictionary
+    lightModes = {
+        0: 0x00,
+        1: 0x01
+    }
+
+    # Then sends the MIDI message using dataOut
+    dataOut(buttons.get(buttonName, ""), lightModes.get(lightMode, ""))
