@@ -18,6 +18,8 @@ import utils
 
 
 # Button name to button ID dictionary
+# The button ID is the number in hex that is used as the DATA1 parameter when a MIDI message related to that button is
+# sent or recieved from the device
 buttons = {
     "PLAY": 0x10,
     "RESTART": 0x11,
