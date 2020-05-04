@@ -56,7 +56,7 @@ def dataOut(data1, data2):
     data1, data2 -- Corresponding bytes of the MIDI message in hex format."""
     
     # Composes the MIDI message and sends it
-    device.midiOutSysex(bytes([0xF0, 0xBF, data1, data2, 0x14, 0x0C, 1, 0xF7]))
+    device.midiOutSysex(bytes([0xF0, 0xBF, data1, data2, 0xF7]))
 
 
 # dataOut method but using int values
@@ -83,7 +83,7 @@ def handShake():
     dataOut(0x01, 0x01)
 
     # TODO: Waits and reads the handshake confirmation message
-    OnMidi
+    
     
 
 # Method to deactivate the deep integration mode. Intended to be executed on close.
