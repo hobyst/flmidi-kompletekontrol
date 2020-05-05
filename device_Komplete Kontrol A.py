@@ -14,13 +14,9 @@ import midi
 import utils
 
 # Imports Native Instruments Host Integration Agent library
-import nihia.core
+import nihia
 
 
 def OnInit():
     # Makes the handshake with NIHIA
-    nihia.core.handShake()
-
-
-    # Prints a little help message
-    print("If you run into issues, run nihia.core.restartProtocol() to fix device freezing.")
+    nihia.handShake()
