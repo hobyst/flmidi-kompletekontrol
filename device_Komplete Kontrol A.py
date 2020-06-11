@@ -269,30 +269,18 @@ def OnInit():
     nihia.buttonSetLight("REC", 0)
     nihia.buttonSetLight("COUNT_IN", 0)
     nihia.buttonSetLight("STOP", 0)
-    nihia.buttonSetLight("CLEAR", 0)
+    nihia.buttonSetLight("CLEAR", 1)
     nihia.buttonSetLight("LOOP", 0)
     nihia.buttonSetLight("METRO", 0)
-
-    nihia.buttonSetLight("QUANTIZE", 0)
-    nihia.buttonSetLight("AUTO", 0)
+    nihia.buttonSetLight("UNDO", 1)
+    nihia.buttonSetLight("REDO", 1)
+    nihia.buttonSetLight("QUANTIZE", 1)
+    nihia.buttonSetLight("REDO", 1)
 
 
 def OnDeInit():
     # Deactivates the deep integration mode
     nihia.goodBye()
-
-    # Set lights
-    nihia.buttonSetLight("PLAY", 0)
-    nihia.buttonSetLight("REC", 0)
-    nihia.buttonSetLight("COUNT_IN", 0)
-    nihia.buttonSetLight("STOP", 0)
-    nihia.buttonSetLight("CLEAR", 1)
-    nihia.buttonSetLight("LOOP", 0)
-    nihia.buttonSetLight("METRO", 0)
-    nihia.buttonSetLight("UNDO", 0)
-    nihia.buttonSetLight("REDO", 0)
-    nihia.buttonSetLight("QUANTIZE", 0)
-    nihia.buttonSetLight("REDO", 0)
 
 
 def OnUpdateBeatIndicator(value):
