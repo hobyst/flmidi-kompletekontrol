@@ -15,7 +15,7 @@ import midi
 import utils
 
 # Imports Native Instruments Host Integration Agent library
-import nihia
+from nihia import nihia
 
 # Imports time library
 import time
