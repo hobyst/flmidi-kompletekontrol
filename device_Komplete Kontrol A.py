@@ -38,39 +38,6 @@ COUNT_IN_BEHAVIOUR=0
 # Declaration of custom methods, functions and variables
 ######################################################################################################################
 
-# Tempo adjustment mode
-tempo_adjust = 0
-tempo_press_count= 0
-
-# Declaration of the method that will keep FL redirecting input for tempo control as long as the user is adjusting the tempo
-# TODO
-def tempoMode(event):
-    """ Triggers """
-    
-    global tempo_adjust
-    global tempo_press_count
-    
-    while tempo_adjust == 1:
-        
-        # When the tempo button is pressed it enters the tempo adjustment mode
-        if event.data1 == nihia.buttons.get("TEMPO") and tempo_press_count == 1:
-            # When Encoder + is triggered, modifies the tempo by +1
-            if event.data1 == nihia.buttons.get("ENCODER_PLUS")[0] and event.data2 == nihia.buttons.get("ENCODER_PLUS")[1]:
-                transport.globalTransport(midi.FPT_TempoJog, 10)
-        
-            # When Encoder - is triggered, modifies the tempo by -1
-            if event.data1 == nihia.buttons.get("ENCODER_MINUS")[0] and event.data2 == nihia.buttons.get("ENCODER_MINUS")[1]:
-                transport.globalTransport(midi.FPT_TempoJog, -10)
-        
-            # When any other key or button is triggered, it is used for tempo tapping
-            else:
-                transport.globalTransport(midi.FPT_TapTempo, 1)
-
-        # When the tempo button is pressed again it exits the tempo adjustment mode
-        if event.data1 == nihia.buttons.get("TEMPO") and tempo_press_count == 2:
-            tempo_adjust = 0
-
-
 # Variable for the window change produced by the Quantize button
 window = -1
 
@@ -301,4 +268,3 @@ def OnRefresh(HW_Dirty_LEDs):
     # Play button may get stuck on highlighted state when playback is paused
     if transport.isPlaying() == False:
         nihia.buttonSetLight("PLAY", 0)
-    
