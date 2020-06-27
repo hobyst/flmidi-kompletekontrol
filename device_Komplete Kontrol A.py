@@ -1,4 +1,4 @@
-# name=Native Instruments Komplete Kontrol A
+# name=Native Instruments Komplete Kontrol
 # url = 
 
 import patterns
