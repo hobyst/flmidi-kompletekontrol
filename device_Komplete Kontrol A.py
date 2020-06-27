@@ -110,8 +110,8 @@ def OnMidiIn(event):
         transport.globalTransport(midi.FPT_Metronome, 1)
     
     # Tempo button
-    # Enables tempo tapping on the keys/pads of the device and tempo jogging using the 4D encoder
-    # TODO
+    if event.data1 == nihia.buttons.get("TEMPO"):
+        transport.globalTransport(midi.FPT_TapTempo, 1)
 
 
     # Undo button
@@ -228,6 +228,7 @@ def OnMidiIn(event):
 ######################################################################################################################
 
 def OnInit():
+    
     # Activates the deep integration mode
     nihia.handShake()
 
@@ -250,21 +251,74 @@ def OnDeInit():
     nihia.goodBye()
 
 
-def OnUpdateBeatIndicator(value):
+# def OnUpdateBeatIndicator(value):
     # Play button blinking -- code snippet based on one from soundwrightpro
-    if transport.isPlaying() == True:
-        # Make it turn on on beat change
-        if value == 2:
-            nihia.buttonSetLight("PLAY", 1)
-        # Make it turn on on bar change
-        elif value == 1:
-            nihia.buttonSetLight("PLAY", 1)
-        # Make it turn off when there is no change
-        else:
-            nihia.buttonSetLight("PLAY", 0)
+    # Decided to remove it in order to have a pure implementation of the features given by Native Instruments
+    # -------------------------------------------------------------------------------------------------------
+    #  if transport.isPlaying() == True:
+    #     # Make it turn on on beat change
+    #     if value == 2:
+    #         nihia.buttonSetLight("PLAY", 1)
+    #     # Make it turn on on bar change
+    #     elif value == 1:
+    #         nihia.buttonSetLight("PLAY", 1)
+    #     # Make it turn off when there is no change
+    #     else:
+    #         nihia.buttonSetLight("PLAY", 0)
+    # -------------------------------------------------------------------------------------------------------
+
+def OnIdle():
+    # Updates the LED of the CLEAR button (moved to OnIdle, since OnRefresh isn't called when focused window changes)
+    if ui.getFocused(midi.widPianoRoll) == True:
+        nihia.buttonSetLight("CLEAR", 1)
+    
+    if ui.getFocused(midi.widPianoRoll) == False:
+        nihia.buttonSetLight("CLEAR", 0)
+
 
 # Updates the LEDs
 def OnRefresh(HW_Dirty_LEDs):
-    # Play button may get stuck on highlighted state when playback is paused
+    # PLAY button
+    if transport.isPlaying() == True:
+        nihia.buttonSetLight("PLAY", 1)
+    
     if transport.isPlaying() == False:
         nihia.buttonSetLight("PLAY", 0)
+    
+    # STOP button
+    if transport.isPlaying() == True:
+        nihia.buttonSetLight("STOP", 0)
+    
+    if transport.isPlaying() == False:
+        nihia.buttonSetLight("STOP", 1)
+    
+    # REC button
+    if transport.isRecording() == True:
+        nihia.buttonSetLight("REC", 1)
+    
+    if transport.isRecording() == False:
+        nihia.buttonSetLight("REC", 0)
+
+    # COUNT-IN button
+    if ui.isPrecountEnabled() == True:
+        nihia.buttonSetLight("COUNT_IN", 1)
+
+    if ui.isPrecountEnabled() == False:
+        nihia.buttonSetLight("COUNT_IN", 0)
+    
+    # CLEAR button (moved to OnIdle, since OnRefresh isn't called when focused window changes)
+
+    # LOOP button
+    if ui.isLoopRecEnabled() == True:
+        nihia.buttonSetLight("LOOP", 1)
+    
+    if ui.isLoopRecEnabled() == False:
+        nihia.buttonSetLight("LOOP", 0)
+
+    # METRO button
+    if ui.isMetronomeEnabled() == True:
+        nihia.buttonSetLight("METRO", 1)
+
+    if ui.isMetronomeEnabled() == False:
+        nihia.buttonSetLight("METRO", 0)
+
