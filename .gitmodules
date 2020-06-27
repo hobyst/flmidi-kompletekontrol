@@ -1,0 +1,4 @@
+[submodule "flmidi-nihia"]
+	path = flmidi-nihia
+	url = https://github.com/hobyst/flmidi-nihia.git
+	branch = dev
