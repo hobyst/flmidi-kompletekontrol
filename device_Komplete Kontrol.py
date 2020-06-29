@@ -17,8 +17,8 @@ import utils
 # Imports Native Instruments Host Integration Agent library
 from nihia import nihia
 
-# Imports time library
-import time
+# Imports math library
+import math
 
 
 ######################################################################################################################
@@ -43,6 +43,144 @@ window = -1
 
 # Variable for the window change produced by the Quantize button (second implementation)
 window2 = 63
+
+# Method to report mixer tracks
+# Splits the 126 mixer busses (including the master) in 16 groups of 8 each one (the last one will have the last two tracks deactivated since 16 * 8 = 128)
+# Then shows the tracks corresponding to the ones that are in the same group as the selected track TODO
+# 
+# Function that retrieves the ID of the track group given the track number is f(x) = 1/8 * x
+def updateMixerTracks(dataType: str, trackNumber: int):
+    """ Given the number of the selected track number on the mixer, it is able to know which track group should render into the screen device and bulk reports their information.
+    
+    ### Parameters
+
+     - dataType: The kind of data you are going to update.
+    
+     - trackNumber: The number of the track that is currently selected, going from 0 to 125. `mixer.trackNumber()` can be used directly to fill the argument.
+    """
+
+    # Uses the function to know which track group the current track belongs to and truncates the value to get the exact number
+    trackGroup = math.trunc(1/8 * trackNumber)
+
+    # Multiplies the trackGroup to 8 to get the index of the first track that has to be shown
+    trackFirst = trackGroup * 8
+
+    
+    # If the selected track belongs to the 16th group, it will declare the last two tracks as non existant
+    # Otherwise, it will declare all as existant
+    if trackGroup == 15:
+        for x in range(trackFirst, trackFirst + 8):
+            nihia.mixerSendInfo("EXIST", 0, value=1)
+            nihia.mixerSendInfo("EXIST", 1, value=1)
+            nihia.mixerSendInfo("EXIST", 2, value=1)
+            nihia.mixerSendInfo("EXIST", 3, value=1)
+            nihia.mixerSendInfo("EXIST", 4, value=1)
+            nihia.mixerSendInfo("EXIST", 5, value=1)
+            nihia.mixerSendInfo("EXIST", 6, value=0)
+            nihia.mixerSendInfo("EXIST", 7, value=0)
+    
+    else:
+        for x in range(trackFirst, trackFirst + 8):
+            nihia.mixerSendInfo("EXIST", x - trackFirst, value=1)
+    
+    
+    # In case the group track is the 16th one, it will limit the declaration of tracks to 6
+    if trackGroup == 15:
+        trackLimit = trackFirst + 7
+    
+    elif trackGroup != 15:
+        trackLimit = trackFirst + 8
+    
+    # Loop that updates the info of the tracks one by one (sums the actual track number)
+    for x in range(trackFirst, trackLimit):
+        
+        if dataType == "NAME":
+            nihia.mixerSendInfo("NAME", x - trackFirst, info=mixer.getTrackName(x))
+        
+        if dataType == "VOLUME":
+            
+            # Declares volume as minus infinite if the value is 0
+            if mixer.getTrackVolume(x) == 0:
+                dB = "-oo"
+
+            elif mixer.getTrackVolume(x) != 0:
+                # Calculates the dB value of the current track -- based of a code snippet by soundwrightpro
+                dB = (math.exp(mixer.getTrackVolume(x) * 1.25 * math.log(11)) - 1) * 0.1
+                dB = round(math.log10(dB) * 20, 1)
+
+            dB = str(dB) + " dB"
+            
+            nihia.mixerSendInfo("VOLUME", x - trackFirst, info=dB)
+    
+        if dataType == "PAN":
+            # Centered
+            if mixer.getTrackPan(x) == 0:
+                nihia.mixerSendInfo("PAN", x - trackFirst, info="Centered")
+            
+            # Right
+            elif mixer.getTrackPan(x) > 1:
+                nihia.mixerSendInfo("PAN", x - trackFirst, info=str(round((abs(mixer.getTrackPan(x)) * 100))) + "% Right")
+
+            # Left
+            elif mixer.getTrackPan(x) < 1:
+                nihia.mixerSendInfo("PAN", x - trackFirst, info=str(round((abs(mixer.getTrackPan(x)) * 100))) + "% " + "Left")
+
+        if dataType == "IS_MUTE":
+            nihia.mixerSendInfo("IS_MUTE", x - trackFirst, value=mixer.isTrackMuted(x))
+        
+        if dataType == "IS_SOLO":
+            nihia.mixerSendInfo("IS_SOLO", x - trackFirst, value=mixer.isTrackSolo(x))
+
+        if dataType == "SELECTED":
+            nihia.mixerSendInfo("SELECTED", x - trackFirst, value=mixer.isTrackSelected(x))
+        
+        if dataType == "PAN":
+            nihia.mixerSendInfo("PAN", x - trackFirst, info=[mixer.getTrackPeaks(x, 0), mixer.getTrackPeaks(x, 1)])
+
+
+def updateMixer():
+    """ Updates every property of the mixer. """
+    updateMixerTracks("NAME",mixer.trackNumber())
+    updateMixerTracks("SELECTED",mixer.trackNumber())
+    updateMixerTracks("VOLUME",mixer.trackNumber())
+    updateMixerTracks("PAN",mixer.trackNumber())
+    updateMixerTracks("IS_MUTE",mixer.trackNumber())
+    updateMixerTracks("IS_SOLO",mixer.trackNumber())
+
+
+def adjustMixer(knob: int, dataType: str, action: str, selectedTrack: int):
+    """ Dynamically maps the physical knob to the right mixer track depending on the track group the selected track belongs to, and adjusts the parameter.
+    ### Parameters
+
+     - knob: From 0 to 7. Number of the physical knob you are mapping.
+    
+     - dataType: The parameter you are going to adjust. Can be PAN or VOLUME.
+
+     - action: Can be INCREASE or DECREASE.
+
+     - selectedTrack: The actual selected track that will be used to calculate the track group.
+    """
+    # Calculates which track group the current track belongs to and truncates the value to get the exact number
+    trackGroup = math.trunc(1/8 * selectedTrack)
+
+    # Multiplies the trackGroup to 8 to get the index of the first track of that group
+    trackFirst = trackGroup * 8
+
+    if dataType == "VOLUME":
+        if action == "INCREASE":
+            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + 0.005)
+        
+        if action == "DECREASE":
+            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - 0.005)
+
+    if dataType == "PAN":
+        if action == "INCREASE":
+            mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) + 0.01)
+
+        if action == "DECREASE":
+            mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) - 0.01)
+
+
 
 ######################################################################################################################
 # Button to action definitions
@@ -172,11 +310,12 @@ def OnMidiIn(event):
 
 
     # Mute button
-    # TODO
-
+    if event.data1 == nihia.buttons.get("MUTE"):
+        mixer.muteTrack(mixer.trackNumber())
 
     # Solo button
-    # TODO
+    if event.data1 == nihia.buttons.get("SOLO"):
+        mixer.soloTrack(mixer.trackNumber())
 
 
     # 4D Encoder + to down (to improve navigation in general)
@@ -221,6 +360,108 @@ def OnMidiIn(event):
     if event.data1 == nihia.buttons.get("ENCODER_BUTTON"):
         ui.enter()
 
+    # Knobs
+    # Normal knobs - increase values
+    if event.data1 == nihia.knobs.get("KNOB_1A") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(0, "VOLUME", "INCREASE", mixer.trackNumber())
+    
+    if event.data1 == nihia.knobs.get("KNOB_2A") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(1, "VOLUME", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_3A") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(2, "VOLUME", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_4A") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(3, "VOLUME", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_5A") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(4, "VOLUME", "INCREASE", mixer.trackNumber())
+    
+    if event.data1 == nihia.knobs.get("KNOB_6A") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(5, "VOLUME", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_7A") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(6, "VOLUME", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_8A") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(7, "VOLUME", "INCREASE", mixer.trackNumber())
+    
+    # Normal knobs - decrease values
+    if event.data1 == nihia.knobs.get("KNOB_1A") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(0, "VOLUME", "DECREASE", mixer.trackNumber())
+    
+    if event.data1 == nihia.knobs.get("KNOB_2A") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(1, "VOLUME", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_3A") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(2, "VOLUME", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_4A") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(3, "VOLUME", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_5A") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(4, "VOLUME", "DECREASE", mixer.trackNumber())
+    
+    if event.data1 == nihia.knobs.get("KNOB_6A") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(5, "VOLUME", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_7A") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(6, "VOLUME", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_8A") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(7, "VOLUME", "DECREASE", mixer.trackNumber())
+
+
+    
+    # Shifted knobs - increase values
+    if event.data1 == nihia.knobs.get("KNOB_1B") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(0, "PAN", "INCREASE", mixer.trackNumber())
+    
+    if event.data1 == nihia.knobs.get("KNOB_2B") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(1, "PAN", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_3B") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(2, "PAN", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_4B") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(3, "PAN", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_5B") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(4, "PAN", "INCREASE", mixer.trackNumber())
+    
+    if event.data1 == nihia.knobs.get("KNOB_6B") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(5, "PAN", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_7B") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(6, "PAN", "INCREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("INCREASE"):
+        adjustMixer(7, "PAN", "INCREASE", mixer.trackNumber())
+    
+    # Shifted knobs - decrease values
+    if event.data1 == nihia.knobs.get("KNOB_1B") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(0, "PAN", "DECREASE", mixer.trackNumber())
+    
+    if event.data1 == nihia.knobs.get("KNOB_2B") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(1, "PAN", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_3B") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(2, "PAN", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_4B") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(3, "PAN", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_5B") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(4, "PAN", "DECREASE", mixer.trackNumber())
+    
+    if event.data1 == nihia.knobs.get("KNOB_6B") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(5, "PAN", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_7B") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(6, "PAN", "DECREASE", mixer.trackNumber())
+
+    if event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("DECREASE"):
+        adjustMixer(7, "PAN", "DECREASE", mixer.trackNumber())
 
 
 ######################################################################################################################
@@ -245,6 +486,7 @@ def OnInit():
     nihia.buttonSetLight("QUANTIZE", 1)
     nihia.buttonSetLight("REDO", 1)
 
+    updateMixer()
 
 def OnDeInit():
     # Deactivates the deep integration mode
@@ -274,9 +516,12 @@ def OnIdle():
     
     if ui.getFocused(midi.widPianoRoll) == False:
         nihia.buttonSetLight("CLEAR", 0)
+    
 
 
-# Updates the LEDs
+
+
+# Updates the LEDs and the mixer
 def OnRefresh(HW_Dirty_LEDs):
     # PLAY button
     if transport.isPlaying() == True:
@@ -322,3 +567,23 @@ def OnRefresh(HW_Dirty_LEDs):
     if ui.isMetronomeEnabled() == False:
         nihia.buttonSetLight("METRO", 0)
 
+    # MUTE button
+    if mixer.isTrackMuted(mixer.trackNumber()) == True:
+        nihia.buttonSetLight("MUTE", 1)
+
+    if mixer.isTrackMuted(mixer.trackNumber()) == False:
+        nihia.buttonSetLight("MUTE", 0)
+    
+    # SOLO button
+    if mixer.isTrackSolo(mixer.trackNumber()) == True:
+        nihia.buttonSetLight("SOLO", 1)
+
+    if mixer.isTrackSolo(mixer.trackNumber()) == False:
+        nihia.buttonSetLight("SOLO", 0)
+    
+
+    updateMixer()
+
+
+def OnUpdateMeters():
+    updateMixerTracks("PEAK",mixer.trackNumber())
