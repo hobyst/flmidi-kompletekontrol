@@ -134,8 +134,8 @@ def updateMixerTracks(dataType: str, trackNumber: int):
         if dataType == "SELECTED":
             nihia.mixerSendInfo("SELECTED", x - trackFirst, value=mixer.isTrackSelected(x))
         
-        if dataType == "PAN":
-            nihia.mixerSendInfo("PAN", x - trackFirst, info=[mixer.getTrackPeaks(x, 0), mixer.getTrackPeaks(x, 1)])
+        if dataType == "PEAK":
+            nihia.mixerSendInfo("PEAK", x - trackFirst, info=[mixer.getTrackPeaks(x, 0), mixer.getTrackPeaks(x, 1)])
 
 
 def updateMixer():
