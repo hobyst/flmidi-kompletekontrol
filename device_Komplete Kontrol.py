@@ -84,7 +84,7 @@ def updateMixerTracks(dataType: str, trackNumber: int):
             nihia.mixerSendInfo("EXIST", x - trackFirst, value=1)
     
     
-    # In case the group track is the 16th one, it will limit the declaration of tracks to 6
+    # In case the group track is the 16th one, it will limit the declaration of tracks to 7
     if trackGroup == 15:
         trackLimit = trackFirst + 7
     
