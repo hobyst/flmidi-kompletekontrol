@@ -139,7 +139,7 @@ def updateMixerTracks(dataType: str, trackNumber: int):
 
 
 def updateMixer():
-    """ Updates every property of the mixer. """
+    """ Updates every property of the mixer but the peak values. """
     updateMixerTracks("NAME",mixer.trackNumber())
     updateMixerTracks("SELECTED",mixer.trackNumber())
     updateMixerTracks("VOLUME",mixer.trackNumber())
@@ -485,7 +485,9 @@ def OnInit():
     nihia.buttonSetLight("REDO", 1)
     nihia.buttonSetLight("QUANTIZE", 1)
     nihia.buttonSetLight("REDO", 1)
+    nihia.buttonSetLight("TEMPO", 1)
 
+    # Updates the device mixer
     updateMixer()
 
 def OnDeInit():
@@ -517,8 +519,6 @@ def OnIdle():
     if ui.getFocused(midi.widPianoRoll) == False:
         nihia.buttonSetLight("CLEAR", 0)
     
-
-
 
 
 # Updates the LEDs and the mixer
@@ -581,7 +581,7 @@ def OnRefresh(HW_Dirty_LEDs):
     if mixer.isTrackSolo(mixer.trackNumber()) == False:
         nihia.buttonSetLight("SOLO", 0)
     
-
+    # Mixer
     updateMixer()
 
 
