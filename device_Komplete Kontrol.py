@@ -519,6 +519,13 @@ def OnIdle():
     if ui.getFocused(midi.widPianoRoll) == False:
         nihia.buttonSetLight("CLEAR", 0)
     
+    updateMixerTracks("PEAK", mixer.trackNumber())
+    print("Peak updated.")
+
+
+
+
+    
 
 
 # Updates the LEDs and the mixer
@@ -581,9 +588,14 @@ def OnRefresh(HW_Dirty_LEDs):
     if mixer.isTrackSolo(mixer.trackNumber()) == False:
         nihia.buttonSetLight("SOLO", 0)
     
+    
+    
+def OnRefresh(HW_Dirty_Mixer_Sel):
     # Mixer
     updateMixer()
+    print("Mixer updated.")
 
 
-def OnUpdateMeters():
-    updateMixerTracks("PEAK",mixer.trackNumber())
+# def OnUpdateMeters():
+#     updateMixerTracks("PEAK", mixer.trackNumber())
+#     print("Peak updated.")
