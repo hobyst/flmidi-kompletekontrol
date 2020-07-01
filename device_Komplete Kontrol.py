@@ -589,8 +589,6 @@ def OnRefresh(HW_Dirty_LEDs):
     if mixer.isTrackSolo(mixer.trackNumber()) == False:
         nihia.buttonSetLight("SOLO", 0)
     
-    
-    
-def OnRefresh(HW_Dirty_Mixer_Sel):
+    # Update mixer but peak meters
     updateMixer()
     print("Mixer updated.")
