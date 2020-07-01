@@ -46,7 +46,7 @@ window2 = 63
 
 # Method to report mixer tracks
 # Splits the 126 mixer busses (including the master) in 16 groups of 8 each one (the last one will have the last two tracks deactivated since 16 * 8 = 128)
-# Then shows the tracks corresponding to the ones that are in the same group as the selected track TODO
+# Then shows the tracks corresponding to the ones that are in the same group as the selected track
 # 
 # Function that retrieves the ID of the track group given the track number is f(x) = 1/8 * x
 def updateMixerTracks(dataType: str, trackNumber: int):
@@ -139,7 +139,7 @@ def updateMixerTracks(dataType: str, trackNumber: int):
 
 
 def updateMixer():
-    """ Updates every property of the mixer. """
+    """ Updates every property of the mixer but the peak values. """
     updateMixerTracks("NAME",mixer.trackNumber())
     updateMixerTracks("SELECTED",mixer.trackNumber())
     updateMixerTracks("VOLUME",mixer.trackNumber())
@@ -179,7 +179,6 @@ def adjustMixer(knob: int, dataType: str, action: str, selectedTrack: int):
 
         if action == "DECREASE":
             mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) - 0.01)
-
 
 
 ######################################################################################################################
@@ -469,7 +468,7 @@ def OnMidiIn(event):
 ######################################################################################################################
 
 def OnInit():
-    
+
     # Activates the deep integration mode
     nihia.handShake()
 
@@ -485,7 +484,9 @@ def OnInit():
     nihia.buttonSetLight("REDO", 1)
     nihia.buttonSetLight("QUANTIZE", 1)
     nihia.buttonSetLight("REDO", 1)
+    nihia.buttonSetLight("TEMPO", 1)
 
+    # Updates the device mixer
     updateMixer()
 
 def OnDeInit():
@@ -516,9 +517,16 @@ def OnIdle():
     
     if ui.getFocused(midi.widPianoRoll) == False:
         nihia.buttonSetLight("CLEAR", 0)
+
+    # Update peak meters
+    # TODO: Disabled due to performance issues (multi-threading support needed)
+    # ----------------------------------------------
+    # updateMixerTracks("PEAK", mixer.trackNumber())
+    # print("Peak updated.")
+    # ----------------------------------------------
+
+
     
-
-
 
 
 # Updates the LEDs and the mixer
@@ -581,9 +589,8 @@ def OnRefresh(HW_Dirty_LEDs):
     if mixer.isTrackSolo(mixer.trackNumber()) == False:
         nihia.buttonSetLight("SOLO", 0)
     
-
+    
+    
+def OnRefresh(HW_Dirty_Mixer_Sel):
     updateMixer()
-
-
-def OnUpdateMeters():
-    updateMixerTracks("PEAK",mixer.trackNumber())
+    print("Mixer updated.")
