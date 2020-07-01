@@ -46,7 +46,7 @@ window2 = 63
 
 # Method to report mixer tracks
 # Splits the 126 mixer busses (including the master) in 16 groups of 8 each one (the last one will have the last two tracks deactivated since 16 * 8 = 128)
-# Then shows the tracks corresponding to the ones that are in the same group as the selected track TODO
+# Then shows the tracks corresponding to the ones that are in the same group as the selected track
 # 
 # Function that retrieves the ID of the track group given the track number is f(x) = 1/8 * x
 def updateMixerTracks(dataType: str, trackNumber: int):
@@ -179,7 +179,6 @@ def adjustMixer(knob: int, dataType: str, action: str, selectedTrack: int):
 
         if action == "DECREASE":
             mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) - 0.01)
-
 
 
 ######################################################################################################################
@@ -469,7 +468,7 @@ def OnMidiIn(event):
 ######################################################################################################################
 
 def OnInit():
-    
+
     # Activates the deep integration mode
     nihia.handShake()
 
@@ -518,11 +517,13 @@ def OnIdle():
     
     if ui.getFocused(midi.widPianoRoll) == False:
         nihia.buttonSetLight("CLEAR", 0)
-    
-    updateMixerTracks("PEAK", mixer.trackNumber())
-    print("Peak updated.")
 
-
+    # Update peak meters
+    # TODO: Disabled due to performance issues (multi-threading support needed)
+    # ----------------------------------------------
+    # updateMixerTracks("PEAK", mixer.trackNumber())
+    # print("Peak updated.")
+    # ----------------------------------------------
 
 
     
@@ -591,11 +592,5 @@ def OnRefresh(HW_Dirty_LEDs):
     
     
 def OnRefresh(HW_Dirty_Mixer_Sel):
-    # Mixer
     updateMixer()
     print("Mixer updated.")
-
-
-# def OnUpdateMeters():
-#     updateMixerTracks("PEAK", mixer.trackNumber())
-#     print("Peak updated.")
