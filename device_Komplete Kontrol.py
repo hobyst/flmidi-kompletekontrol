@@ -563,6 +563,13 @@ def OnIdle():
     if ui.getFocused(midi.widPianoRoll) == False:
         nihia.buttonSetLight("CLEAR", 0)
 
+    # Update peak meters
+    # TODO: Disabled due to performance issues (multi-threading support needed)
+    # ----------------------------------------------
+    if DEVICE_SERIES == "S_SERIES":
+        updateMixerTracks("PEAK", mixer.trackNumber())
+        print("Peak updated.")
+    # ----------------------------------------------
 
 
     
@@ -631,11 +638,3 @@ def OnRefresh(HW_Dirty_LEDs):
     # Update mixer but peak meters
     updateMixer()
     print("Mixer updated.")
-
-    # Update peak meters
-    # TODO: Disabled due to performance issues (multi-threading support needed)
-    # ----------------------------------------------
-    if DEVICE_SERIES == "S_SERIES":
-        updateMixerTracks("PEAK", mixer.trackNumber())
-        print("Peak updated.")
-    # ----------------------------------------------
