@@ -45,7 +45,7 @@ window = -1
 window2 = 63
 
 # Method to report mixer tracks
-# Splits the 126 mixer busses (including the master) in 16 groups of 8 each one (the last one will have the last two tracks deactivated since 16 * 8 = 128)
+# Splits the 126 mixer busses (including the master) in 15 groups of 8 each one (the last one will have the last two tracks deactivated since 16 * 8 = 128)
 # Then shows the tracks corresponding to the ones that are in the same group as the selected track
 # 
 # Function that retrieves the ID of the track group given the track number is f(x) = 1/8 * x
@@ -84,7 +84,7 @@ def updateMixerTracks(dataType: str, trackNumber: int):
             nihia.mixerSendInfo("EXIST", x - trackFirst, value=1)
     
     
-    # In case the group track is the 16th one, it will limit the declaration of tracks to 7
+    # In case the group track is the 15th one, it will limit the declaration of tracks to 7
     if trackGroup == 15:
         trackLimit = trackFirst + 7
     
