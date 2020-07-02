@@ -321,8 +321,8 @@ def OnMidiIn(event):
     if event.data1 == nihia.buttons.get("ENCODER_PLUS")[0] and event.data2 == nihia.buttons.get("ENCODER_PLUS")[1]:
         
         # Mixer navigation (right)
-        if ui.getFocused(0):
-            ui.right()
+        if ui.getFocused(midi.widMixer) == True:
+            mixer.setTrackNumber(mixer.trackNumber() + 1)
         
         # General navigation
         else:
@@ -332,8 +332,8 @@ def OnMidiIn(event):
     if event.data1 == nihia.buttons.get("ENCODER_MINUS")[0] and event.data2 == nihia.buttons.get("ENCODER_MINUS")[1]:
         
         # Mixer navigation
-        if ui.getFocused(0):
-            ui.left()
+        if ui.getFocused(midi.widMixer) == True:
+            mixer.setTrackNumber(mixer.trackNumber() - 1)
 
         # General navigation
         else:
@@ -349,11 +349,19 @@ def OnMidiIn(event):
     
     # 4D Encoder (using FPT because ui.left doesn't work on the playlist)
     if event.data1 == nihia.buttons.get("ENCODER_LEFT")[0] and event.data2 == nihia.buttons.get("ENCODER_LEFT")[1]:
-        ui.left()
+        if ui.getFocused(midi.widMixer) == True:
+            mixer.setTrackNumber(mixer.trackNumber() - 1)
+
+        else:
+            ui.left()
     
     # 4D Encoder (using FPT because ui.right doesn't work on the playlist)
     if event.data1 == nihia.buttons.get("ENCODER_RIGHT")[0] and event.data2 == nihia.buttons.get("ENCODER_RIGHT")[1]:
-        ui.right()
+        if ui.getFocused(midi.widMixer) == True:
+            mixer.setTrackNumber(mixer.trackNumber() + 1)
+        
+        else:
+            ui.right()
 
     # 4D Encoder button
     if event.data1 == nihia.buttons.get("ENCODER_BUTTON"):
@@ -589,8 +597,6 @@ def OnRefresh(HW_Dirty_LEDs):
     if mixer.isTrackSolo(mixer.trackNumber()) == False:
         nihia.buttonSetLight("SOLO", 0)
     
-    
-    
-def OnRefresh(HW_Dirty_Mixer_Sel):
+    # Update mixer but peak meters
     updateMixer()
     print("Mixer updated.")
