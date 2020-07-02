@@ -31,8 +31,11 @@ import math
 # If set to 0, it will toggle on/off the "Countdown before recording" option on FL Studio
 # If set to 1, it will act like on the Maschine software: it will make FL Studio jump straight into record mode with 
 # the "Countdown before recording" option enabled
-COUNT_IN_BEHAVIOUR=0
+COUNT_IN_BEHAVIOUR = 0
 
+# Tells the script which kind of device are you using
+# Possible values: "A_SERIES", "M_SERIES" or "S_SERIES"
+DEVICE_SERIES = "S_SERIES"
 
 ######################################################################################################################
 # Declaration of custom methods, functions and variables
@@ -180,6 +183,40 @@ def adjustMixer(knob: int, dataType: str, action: str, selectedTrack: int):
         if action == "DECREASE":
             mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) - 0.01)
 
+
+def encoderHandler(axis: str) -> int:
+    """ Allows to handle the inversion of axis of the 4D Encoder that happens between A/M-Series devices and S-Series devices, by 
+    returning the right MIDI value FL Studio has to check for.
+    ### Parameters
+     - axis: The axis you want to get the value for.
+    """
+    devices = {
+        "A_SERIES": 1,
+        "M_SERIES": 1,
+        "S_SERIES": 2
+    }
+
+    device = devices.get(DEVICE_SERIES)
+
+    # Device check
+    if device == 1:
+        # X axis
+        if axis == "X":
+           return nihia.buttons.get("ENCODER_X_A")
+        
+        # Y axis
+        if axis == "Y":
+           return nihia.buttons.get("ENCODER_Y_A")
+
+    if device == 2:
+        # X axis
+        if axis == "X":
+           return nihia.buttons.get("ENCODER_X_S")
+        
+        # Y axis
+        if axis == "Y":
+           return nihia.buttons.get("ENCODER_Y_S")
+    
 
 ######################################################################################################################
 # Button to action definitions
@@ -340,28 +377,29 @@ def OnMidiIn(event):
             ui.up()
     
     # 4D Encoder up
-    if event.data1 == nihia.buttons.get("ENCODER_UP")[0] and event.data2 == nihia.buttons.get("ENCODER_UP")[1]:
+    if event.data1 == encoderHandler("Y") and event.data2 == nihia.buttons.get("UP"):
         ui.up()
-    
-    # 4D Encoder down 
-    if event.data1 == nihia.buttons.get("ENCODER_DOWN")[0] and event.data2 == nihia.buttons.get("ENCODER_DOWN")[1]:
+
+# 4D Encoder down 
+    if event.data1 == encoderHandler("Y") and event.data2 == nihia.buttons.get("DOWN"):
         ui.down()
-    
-    # 4D Encoder (using FPT because ui.left doesn't work on the playlist)
-    if event.data1 == nihia.buttons.get("ENCODER_LEFT")[0] and event.data2 == nihia.buttons.get("ENCODER_LEFT")[1]:
+
+# 4D Encoder (using FPT because ui.left doesn't work on the playlist)
+    if event.data1 == encoderHandler("X") and event.data2 == nihia.buttons.get("LEFT"):
         if ui.getFocused(midi.widMixer) == True:
             mixer.setTrackNumber(mixer.trackNumber() - 1)
 
         else:
             ui.left()
-    
-    # 4D Encoder (using FPT because ui.right doesn't work on the playlist)
-    if event.data1 == nihia.buttons.get("ENCODER_RIGHT")[0] and event.data2 == nihia.buttons.get("ENCODER_RIGHT")[1]:
+
+# 4D Encoder (using FPT because ui.right doesn't work on the playlist)
+    if event.data1 == encoderHandler("X") and event.data2 == nihia.buttons.get("RIGHT"):
         if ui.getFocused(midi.widMixer) == True:
             mixer.setTrackNumber(mixer.trackNumber() + 1)
         
         else:
             ui.right()
+
 
     # 4D Encoder button
     if event.data1 == nihia.buttons.get("ENCODER_BUTTON"):
