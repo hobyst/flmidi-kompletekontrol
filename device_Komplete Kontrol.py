@@ -138,7 +138,7 @@ def updateMixerTracks(dataType: str, trackNumber: int):
             nihia.mixerSendInfo("SELECTED", x - trackFirst, value=mixer.isTrackSelected(x))
         
         if dataType == "PEAK":
-            nihia.mixerSendInfo("PEAK", x - trackFirst, info=[mixer.getTrackPeaks(x, 0), mixer.getTrackPeaks(x, 1)])
+            nihia.mixerSendInfo("PEAK", x - trackFirst, peakL=mixer.getTrackPeaks(x, 0), peakR=mixer.getTrackPeaks(x, 1))
 
 
 def updateMixer():
@@ -229,8 +229,7 @@ def OnMidiIn(event):
 
     # Restart button
     if event.data1 == nihia.buttons.get("RESTART"):
-        transport.stop()
-        transport.start()
+        transport.setLoopMode()
 
     # Record button
     if event.data1 == nihia.buttons.get("REC"):
@@ -567,8 +566,8 @@ def OnIdle():
     # Update peak meters
     # TODO: Disabled due to performance issues (multi-threading support needed)
     # ----------------------------------------------
-    # updateMixerTracks("PEAK", mixer.trackNumber())
-    # print("Peak updated.")
+    updateMixerTracks("PEAK", mixer.trackNumber())
+    print("Peak updated.")
     # ----------------------------------------------
 
 
