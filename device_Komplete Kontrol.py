@@ -566,8 +566,9 @@ def OnIdle():
     # Update peak meters
     # TODO: Disabled due to performance issues (multi-threading support needed)
     # ----------------------------------------------
-    updateMixerTracks("PEAK", mixer.trackNumber())
-    print("Peak updated.")
+    if DEVICE_SERIES == "S_SERIES":
+        updateMixerTracks("PEAK", mixer.trackNumber())
+        print("Peak updated.")
     # ----------------------------------------------
 
 
