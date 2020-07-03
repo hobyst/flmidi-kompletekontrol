@@ -57,7 +57,7 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
     
     ### Parameters
 
-     - dataType: The kind of data you are going to update.
+     - dataType: The kind of data you are going to update (PEAK is not valid. Use `updatePeak()` instead)
     
      - trackNumber: The number of the track that is currently selected, going from 0 to 125. `mixer.trackNumber()` can be used directly to fill the argument.
     """
@@ -68,10 +68,7 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
     # Multiplies the trackGroup to 8 to get the index of the first track that has to be shown
     trackFirst = trackGroup * 8
 
-    # Creates peakList if peak values are going to be updated
-    if dataType == "PEAK":
-        peakList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    
+
     # If the selected track belongs to the 16th group, it will declare the last two tracks as non existant
     # Otherwise, it will declare all as existant
     if trackGroup == 15:
@@ -140,15 +137,6 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
         if dataType == "SELECTED":
             nihia.mixerSendInfo("SELECTED", x - trackFirst, value=mixer.isTrackSelected(x))
         
-        if dataType == "PEAK":
-
-            # Gets the 16 peak values that need to be reported to the device by building a list [peakL_0, peakR_0, peakL_1, peakR_1 ...]
-            peakList[(x - trackFirst) * 2] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_L)
-            peakList[(x - trackFirst) * 2 + 1] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_R)
-
-
-            nihia.mixerSendInfo("PEAK", 0, peakValues=peakList)
-
 
 def updateMixer():
     """ Updates every property of the mixer of the deivce but the peak values. """
@@ -248,6 +236,37 @@ def mixerMuteSoloHandler(action: str, targetTrack: int, selectedTrack: int):
     if action == "SOLO":
         mixer.soloTrack(trackFirst + targetTrack)
 
+
+def updatePeak(selectedTrack: int):
+    """ Updates peak values for the tracks showing on the device. 
+    ### Parameters
+
+     - selectedTrack: The currently selected track.
+    """
+
+    # Uses the function to know which track group the current track belongs to and truncates the value to get the exact number
+    trackGroup = math.trunc(1/8 * selectedTrack)
+
+    # Multiplies the trackGroup to 8 to get the index of the first track that has to be shown
+    trackFirst = trackGroup * 8
+
+    # Creates peakList if peak values are going to be updated
+    peakList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    # In case the group track is the 15th one, it will limit the declaration of tracks to 7
+    if trackGroup == 15:
+        trackLimit = trackFirst + 7
+    
+    elif trackGroup != 15:
+        trackLimit = trackFirst + 8
+
+    # Gets the 16 peak values that need to be reported to the device by building a list [peakL_0, peakR_0, peakL_1, peakR_1 ...]
+    for x in range(trackFirst, trackLimit):
+        peakList[(x - trackFirst) * 2] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_L)
+        peakList[(x - trackFirst) * 2 + 1] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_R)
+
+    # Sends the values to the device
+    nihia.mixerSendInfo("PEAK", 0, peakValues = peakList)
 
 ######################################################################################################################
 # Button to action definitions
@@ -690,10 +709,10 @@ def OnRefresh(HW_Dirty_LEDs):
     updateMixer()
 
 
-def OnUpdateMeters():
+# def OnUpdateMeters():
     # Update peak meters
     # TODO: Disabled due to performance issues (multi-threading support needed)
     # ----------------------------------------------
-    if DEVICE_SERIES == "S_SERIES":
-      updateMixerTracks("PEAK", mixer.trackNumber())
+    # if DEVICE_SERIES == "S_SERIES":
+    #   updateMixerTracks("PEAK", mixer.trackNumber())
     # ----------------------------------------------
