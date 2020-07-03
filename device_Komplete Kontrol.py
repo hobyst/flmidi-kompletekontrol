@@ -52,7 +52,7 @@ window2 = 63
 # Then shows the tracks corresponding to the ones that are in the same group as the selected track
 # 
 # Function that retrieves the ID of the track group given the track number is f(x) = 1/8 * x
-def updateMixerTracks(dataType: str, trackNumber: int):
+def updateMixerTracks(dataType: str, selectedTrack: int):
     """ Given the number of the selected track number on the mixer, it is able to know which track group should render into the screen device and bulk reports their information.
     
     ### Parameters
@@ -63,7 +63,7 @@ def updateMixerTracks(dataType: str, trackNumber: int):
     """
 
     # Uses the function to know which track group the current track belongs to and truncates the value to get the exact number
-    trackGroup = math.trunc(1/8 * trackNumber)
+    trackGroup = math.trunc(1/8 * selectedTrack)
 
     # Multiplies the trackGroup to 8 to get the index of the first track that has to be shown
     trackFirst = trackGroup * 8
@@ -142,7 +142,7 @@ def updateMixerTracks(dataType: str, trackNumber: int):
 
 
 def updateMixer():
-    """ Updates every property of the mixer but the peak values. """
+    """ Updates every property of the mixer of the deivce but the peak values. """
     updateMixerTracks("NAME",mixer.trackNumber())
     updateMixerTracks("SELECTED",mixer.trackNumber())
     updateMixerTracks("VOLUME",mixer.trackNumber())
@@ -216,7 +216,28 @@ def encoderHandler(axis: str) -> int:
         # Y axis
         if axis == "Y":
            return nihia.buttons.get("ENCODER_Y_S")
+
+def mixerMuteSoloHandler(action: str, targetTrack: int, selectedTrack: int):
+    """ Handles the way mixer and solo commands are sent from S-Series keyboards. 
+    ### Parameters
     
+     - action: MUTE or SOLO.
+     - targetTrack: From 0 to 7, the track that the user is trying to mute or solo from the ones showing on the device's mixer.
+     - selectedTrack: The currently selected track that is used to calculate the track group.
+    """
+    # Uses the function to know which track group the current track belongs to and truncates the value to get the exact number
+    trackGroup = math.trunc(1/8 * selectedTrack)
+
+    # Multiplies the trackGroup to 8 to get the index of the first track that has to be shown
+    trackFirst = trackGroup * 8
+
+    # Adjusts the correct property of the right track
+    if action == "MUTE":
+        mixer.muteTrack(trackFirst + targetTrack)
+
+    if action == "SOLO":
+        mixer.soloTrack(trackFirst + targetTrack)
+
 
 ######################################################################################################################
 # Button to action definitions
@@ -344,13 +365,22 @@ def OnMidiIn(event):
         transport.globalTransport(midi.FPT_F8, 1)
 
 
-    # Mute button
-    if event.data1 == nihia.buttons.get("MUTE"):
+    # Mute button - A-Series
+    if event.data1 == nihia.buttons.get("MUTE_SELECTED"):
         mixer.muteTrack(mixer.trackNumber())
 
-    # Solo button
-    if event.data1 == nihia.buttons.get("SOLO"):
+    # Solo button - A-Series
+    if event.data1 == nihia.buttons.get("SOLO_SELECTED"):
         mixer.soloTrack(mixer.trackNumber())
+
+    # Mute button - S-Series
+    if event.data1 == nihia.buttons.get("MUTE"):
+        mixerMuteSoloHandler("MUTE", event.data2, mixer.trackNumber())
+
+    # Solo button - S-Series
+    if event.data1 == nihia.buttons.get("SOLO"):
+        mixerMuteSoloHandler("SOLO", event.data2, mixer.trackNumber())
+
 
 
     # 4D Encoder + to down (to improve navigation in general)
@@ -358,7 +388,7 @@ def OnMidiIn(event):
         
         # Mixer navigation (right)
         if ui.getFocused(midi.widMixer) == True:
-            mixer.setTrackNumber(mixer.trackNumber() + 1)
+            ui.right()
         
         # General navigation
         else:
@@ -369,7 +399,7 @@ def OnMidiIn(event):
         
         # Mixer navigation
         if ui.getFocused(midi.widMixer) == True:
-            mixer.setTrackNumber(mixer.trackNumber() - 1)
+            ui.left()
 
         # General navigation
         else:
@@ -379,22 +409,31 @@ def OnMidiIn(event):
     if event.data1 == encoderHandler("Y") and event.data2 == nihia.buttons.get("UP"):
         ui.up()
 
-# 4D Encoder down 
+    # 4D Encoder down 
     if event.data1 == encoderHandler("Y") and event.data2 == nihia.buttons.get("DOWN"):
         ui.down()
 
-# 4D Encoder (using FPT because ui.left doesn't work on the playlist)
+    # 4D Encoder (using FPT because ui.left doesn't work on the playlist)
     if event.data1 == encoderHandler("X") and event.data2 == nihia.buttons.get("LEFT"):
         if ui.getFocused(midi.widMixer) == True:
-            mixer.setTrackNumber(mixer.trackNumber() - 1)
+            # This one doesn't move the mixer view as you get to the border
+            # ----------------------------------------------------
+            # mixer.setTrackNumber(mixer.trackNumber() - 1)
+            # ----------------------------------------------------
+            ui.left()
+
 
         else:
             ui.left()
 
-# 4D Encoder (using FPT because ui.right doesn't work on the playlist)
+    # 4D Encoder (using FPT because ui.right doesn't work on the playlist)
     if event.data1 == encoderHandler("X") and event.data2 == nihia.buttons.get("RIGHT"):
         if ui.getFocused(midi.widMixer) == True:
-            mixer.setTrackNumber(mixer.trackNumber() + 1)
+            # This one doesn't move the mixer view as you get to the border
+            # ----------------------------------------------------
+            # mixer.setTrackNumber(mixer.trackNumber() + 1)
+            # ----------------------------------------------------
+            ui.right()
         
         else:
             ui.right()
@@ -631,7 +670,6 @@ def OnRefresh(HW_Dirty_LEDs):
     
     # Update mixer but peak meters
     updateMixer()
-    print("Mixer updated.")
 
 
 def OnUpdateMeters():
@@ -640,5 +678,4 @@ def OnUpdateMeters():
     # ----------------------------------------------
     if DEVICE_SERIES == "S_SERIES":
         updateMixerTracks("PEAK", mixer.trackNumber())
-        print("Peak updated.")
     # ----------------------------------------------
