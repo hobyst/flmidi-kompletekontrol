@@ -217,6 +217,7 @@ def encoderHandler(axis: str) -> int:
         if axis == "Y":
            return nihia.buttons.get("ENCODER_Y_S")
 
+
 def mixerMuteSoloHandler(action: str, targetTrack: int, selectedTrack: int):
     """ Handles the way mixer and solo commands are sent from S-Series keyboards. 
     ### Parameters
@@ -553,6 +554,7 @@ def OnMidiIn(event):
 
 def OnInit():
 
+    # Tells to FL Studio the device has peak meters
     device.setHasMeters()
 
     # Activates the deep integration mode
@@ -672,10 +674,10 @@ def OnRefresh(HW_Dirty_LEDs):
     updateMixer()
 
 
-def OnUpdateMeters():
-    # Update peak meters
-    # TODO: Disabled due to performance issues (multi-threading support needed)
-    # ----------------------------------------------
-    if DEVICE_SERIES == "S_SERIES":
-        updateMixerTracks("PEAK", mixer.trackNumber())
-    # ----------------------------------------------
+# def OnUpdateMeters():
+#     Update peak meters
+#     TODO: Disabled due to performance issues (multi-threading support needed)
+#     ----------------------------------------------
+#     if DEVICE_SERIES == "S_SERIES":
+#       updateMixerTracks("PEAK", mixer.trackNumber())
+#     ----------------------------------------------
