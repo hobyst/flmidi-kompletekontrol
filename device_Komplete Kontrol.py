@@ -138,7 +138,15 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
             nihia.mixerSendInfo("SELECTED", x - trackFirst, value=mixer.isTrackSelected(x))
         
         if dataType == "PEAK":
-            nihia.mixerSendInfo("PEAK", x - trackFirst, peakL=mixer.getTrackPeaks(x, 0), peakR=mixer.getTrackPeaks(x, 1))
+
+            peakList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            # Gets the 16 peak values that need to be reported to the device by building a list [peakL_0, peakR_0, peakL_1, peakR_1 ...]
+            for y in range (0, 15):
+                peakList[y] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_L)
+                peakList[y] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_R)
+
+
+            nihia.mixerSendInfo("PEAK", 0, peakValues=peakList)
 
 
 def updateMixer():
@@ -391,6 +399,10 @@ def OnMidiIn(event):
         if ui.getFocused(midi.widMixer) == True:
             ui.right()
         
+        # Playback jogging
+        elif (ui.getFocused(midi.widPianoRoll) == True) or (ui.getFocused(midi.widPlaylist) == True):
+            transport.setSongPos(transport.getSongPos(midi.SONGLENGTH_S) + 1, midi.SONGLENGTH_S)
+
         # General navigation
         else:
             ui.down()
@@ -401,6 +413,9 @@ def OnMidiIn(event):
         # Mixer navigation
         if ui.getFocused(midi.widMixer) == True:
             ui.left()
+
+        elif (ui.getFocused(midi.widPianoRoll) == True) or (ui.getFocused(midi.widPlaylist) == True):
+            transport.setSongPos(transport.getSongPos(midi.SONGLENGTH_S) - 1, midi.SONGLENGTH_S)
 
         # General navigation
         else:
@@ -674,10 +689,10 @@ def OnRefresh(HW_Dirty_LEDs):
     updateMixer()
 
 
-# def OnUpdateMeters():
-#     Update peak meters
-#     TODO: Disabled due to performance issues (multi-threading support needed)
-#     ----------------------------------------------
-#     if DEVICE_SERIES == "S_SERIES":
-#       updateMixerTracks("PEAK", mixer.trackNumber())
-#     ----------------------------------------------
+def OnUpdateMeters():
+    # Update peak meters
+    # TODO: Disabled due to performance issues (multi-threading support needed)
+    # ----------------------------------------------
+    if DEVICE_SERIES == "S_SERIES":
+      updateMixerTracks("PEAK", mixer.trackNumber())
+    # ----------------------------------------------
