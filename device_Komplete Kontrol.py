@@ -514,6 +514,8 @@ def OnMidiIn(event):
 
 def OnInit():
 
+    device.setHasMeters()
+
     # Activates the deep integration mode
     nihia.handShake()
 
@@ -563,16 +565,8 @@ def OnIdle():
     if ui.getFocused(midi.widPianoRoll) == False:
         nihia.buttonSetLight("CLEAR", 0)
 
-    # Update peak meters
-    # TODO: Disabled due to performance issues (multi-threading support needed)
-    # ----------------------------------------------
-    if DEVICE_SERIES == "S_SERIES":
-        updateMixerTracks("PEAK", mixer.trackNumber())
-        print("Peak updated.")
-    # ----------------------------------------------
 
 
-    
 
 
 # Updates the LEDs and the mixer
@@ -638,3 +632,13 @@ def OnRefresh(HW_Dirty_LEDs):
     # Update mixer but peak meters
     updateMixer()
     print("Mixer updated.")
+
+
+def OnUpdateMeters():
+    # Update peak meters
+    # TODO: Disabled due to performance issues (multi-threading support needed)
+    # ----------------------------------------------
+    if DEVICE_SERIES == "S_SERIES":
+        updateMixerTracks("PEAK", mixer.trackNumber())
+        print("Peak updated.")
+    # ----------------------------------------------
