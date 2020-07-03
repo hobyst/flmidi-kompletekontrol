@@ -141,9 +141,9 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
 
             peakList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             # Gets the 16 peak values that need to be reported to the device by building a list [peakL_0, peakR_0, peakL_1, peakR_1 ...]
-            for y in range (0, 15):
-                peakList[y] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_L)
-                peakList[y] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_R)
+            for y in range (0, 7):
+                peakList[y * 2] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_L)
+                peakList[y * 2 + 1] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_R)
 
 
             nihia.mixerSendInfo("PEAK", 0, peakValues=peakList)
