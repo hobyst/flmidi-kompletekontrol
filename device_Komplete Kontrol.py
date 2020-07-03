@@ -68,6 +68,9 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
     # Multiplies the trackGroup to 8 to get the index of the first track that has to be shown
     trackFirst = trackGroup * 8
 
+    # Creates peakList if peak values are going to be updated
+    if dataType == "PEAK":
+        peakList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     # If the selected track belongs to the 16th group, it will declare the last two tracks as non existant
     # Otherwise, it will declare all as existant
@@ -139,11 +142,9 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
         
         if dataType == "PEAK":
 
-            peakList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             # Gets the 16 peak values that need to be reported to the device by building a list [peakL_0, peakR_0, peakL_1, peakR_1 ...]
-            for y in range (0, 7):
-                peakList[y * 2] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_L)
-                peakList[y * 2 + 1] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_R)
+            peakList[(x - trackFirst) * 2] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_L)
+            peakList[(x - trackFirst) * 2 + 1] = mixer.getTrackPeaks(x - trackFirst, midi.PEAK_R)
 
 
             nihia.mixerSendInfo("PEAK", 0, peakValues=peakList)
