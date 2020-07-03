@@ -709,10 +709,10 @@ def OnRefresh(HW_Dirty_LEDs):
     updateMixer()
 
 
-# def OnUpdateMeters():
+def OnUpdateMeters():
     # Update peak meters
     # TODO: Disabled due to performance issues (multi-threading support needed)
     # ----------------------------------------------
-    # if DEVICE_SERIES == "S_SERIES":
-    #   updateMixerTracks("PEAK", mixer.trackNumber())
+    if DEVICE_SERIES == "S_SERIES":
+      updatePeak(mixer.trackNumber())
     # ----------------------------------------------
