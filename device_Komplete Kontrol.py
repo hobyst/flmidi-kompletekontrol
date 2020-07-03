@@ -714,5 +714,6 @@ def OnUpdateMeters():
     # TODO: Disabled due to performance issues (multi-threading support needed)
     # ----------------------------------------------
     if DEVICE_SERIES == "S_SERIES":
-      updatePeak(mixer.trackNumber())
+    #   updatePeak(mixer.trackNumber())
+        updateMixerTracks("PEAK", mixer.trackNumber())
     # ----------------------------------------------
