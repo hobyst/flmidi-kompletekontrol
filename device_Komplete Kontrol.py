@@ -424,7 +424,7 @@ def OnMidiIn(event):
 
 
     # 4D Encoder + to down (to improve navigation in general)
-    if event.data1 == nihia.buttons.get("ENCODER_PLUS")[0] and event.data2 == nihia.buttons.get("ENCODER_PLUS")[1]:
+    if event.data1 == nihia.buttons.get("ENCODER_GENERAL") and event.data2 == nihia.buttons.get("PLUS"):
         
         # Mixer navigation (right)
         if ui.getFocused(midi.widMixer) == True:
@@ -439,7 +439,7 @@ def OnMidiIn(event):
             ui.down()
     
     # 4D Encoder - to up (to improve navigation in general)
-    if event.data1 == nihia.buttons.get("ENCODER_MINUS")[0] and event.data2 == nihia.buttons.get("ENCODER_MINUS")[1]:
+    if event.data1 == nihia.buttons.get("ENCODER_GENERAL") and event.data2 == nihia.buttons.get("MINUS"):
         
         # Mixer navigation
         if ui.getFocused(midi.widMixer) == True:
@@ -619,6 +619,11 @@ def OnInit():
     nihia.buttonSetLight("QUANTIZE", 1)
     nihia.buttonSetLight("REDO", 1)
     nihia.buttonSetLight("TEMPO", 1)
+
+    # Sets the lights of the 4D Encoder on S-Series keyboards on
+    if DEVICE_SERIES == "S_SERIES":
+        nihia.buttonSetLight("ENCODER_X_S", 1)
+        nihia.buttonSetLight("ENCODER_Y_S", 1)
 
     # Updates the device mixer
     updateMixer()
