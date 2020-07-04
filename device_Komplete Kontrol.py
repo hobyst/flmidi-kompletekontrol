@@ -137,8 +137,6 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
             nihia.mixerSendInfo("SELECTED", x - trackFirst, value=mixer.isTrackSelected(x))
 
 
-
-
 def updateMixer():
     """ Updates every property of the mixer of the deivce but the peak values. """
     updateMixerTracks("NAME",mixer.trackNumber())
@@ -634,6 +632,7 @@ def OnDeInit():
     #         nihia.buttonSetLight("PLAY", 0)
     # -------------------------------------------------------------------------------------------------------
 
+
 def OnIdle():
     # Updates the LED of the CLEAR button (moved to OnIdle, since OnRefresh isn't called when focused window changes)
     if ui.getFocused(midi.widPianoRoll) == True:
@@ -641,8 +640,6 @@ def OnIdle():
     
     if ui.getFocused(midi.widPianoRoll) == False:
         nihia.buttonSetLight("CLEAR", 0)
-
-
 
 
 
@@ -708,6 +705,7 @@ def OnRefresh(HW_Dirty_LEDs):
     
     # Update mixer but peak meters
     updateMixer()
+
 
 
 def OnUpdateMeters():
