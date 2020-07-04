@@ -741,11 +741,13 @@ def OnRefresh(HW_Dirty_LEDs):
     updateMixer()
 
     # Tell the device if a mixer track is selected or not
-    if ui.getFocused(midi.widMixer) == True:
-        nihia.mixerSendInfoSelected("SELECTED", "GENERIC")
-
-    if ui.getFocused(midi.widMixer) == False:
-        nihia.mixerSendInfoSelected("SELECTED", "EMPTY")
+    # It enables the ability to control mixer tracks using the 4D Encoder on S-Series keyboards
+    # Disabled due to lack of awareness on how it is enabled and disabled correctly
+    # if ui.getFocused(midi.widMixer) == True:
+    #     nihia.mixerSendInfoSelected("SELECTED", "GENERIC")
+    # 
+    # if ui.getFocused(midi.widMixer) == False:
+    #     nihia.mixerSendInfoSelected("SELECTED", "EMPTY")
 
 
 def OnUpdateMeters():
