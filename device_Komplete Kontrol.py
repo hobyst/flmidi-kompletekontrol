@@ -179,10 +179,10 @@ def adjustMixer(knob: int, dataType: str, action: str, selectedTrack: int):
 
     if dataType == "VOLUME":
         if action == "INCREASE":
-            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + 0.005)
+            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + 0.01)
         
         if action == "DECREASE":
-            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - 0.005)
+            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - 0.01)
 
     if dataType == "PAN":
         if action == "INCREASE":
@@ -423,7 +423,7 @@ def OnMidiIn(event):
 
 
 
-    # 4D Encoder + to down (to improve navigation in general)
+    # 4D Encoder +
     if event.data1 == nihia.buttons.get("ENCODER_GENERAL") and event.data2 == nihia.buttons.get("PLUS"):
         
         # Mixer navigation (right)
@@ -438,7 +438,7 @@ def OnMidiIn(event):
         else:
             ui.down()
     
-    # 4D Encoder - to up (to improve navigation in general)
+    # 4D Encoder -
     if event.data1 == nihia.buttons.get("ENCODER_GENERAL") and event.data2 == nihia.buttons.get("MINUS"):
         
         # Mixer navigation
@@ -451,6 +451,23 @@ def OnMidiIn(event):
         # General navigation
         else:
             ui.up()
+    
+    # 4D Encoder + (selected track volume)
+    if event.data1 == nihia.buttons.get("ENCODER_VOLUME_SELECTED") and event.data2 == nihia.buttons.get("PLUS"):
+        mixer.setTrackVolume(mixer.trackNumber(), mixer.getTrackVolume(mixer.trackNumber()) + 0.01)
+    
+    # 4D Encoder - (selected track volume)
+    if event.data1 == nihia.buttons.get("ENCODER_VOLUME_SELECTED") and event.data2 == nihia.buttons.get("MINUS"):
+        mixer.setTrackVolume(mixer.trackNumber(), mixer.getTrackVolume(mixer.trackNumber()) - 0.01)
+
+    
+    # 4D Encoder + (selected track pan)
+    if event.data1 == nihia.buttons.get("ENCODER_PAN_SELECTED") and event.data2 == nihia.buttons.get("PLUS"):
+        mixer.setTrackPan(mixer.trackNumber(), mixer.getTrackPan(mixer.trackNumber()) + 0.01)
+    
+    # 4D Encoder + (selected track pan)
+    if event.data1 == nihia.buttons.get("ENCODER_PAN_SELECTED") and event.data2 == nihia.buttons.get("MINUS"):
+        mixer.setTrackPan(mixer.trackNumber(), mixer.getTrackPan(mixer.trackNumber()) - 0.01)
     
     # 4D Encoder up
     if event.data1 == encoderHandler("Y") and event.data2 == nihia.buttons.get("UP"):
@@ -723,6 +740,12 @@ def OnRefresh(HW_Dirty_LEDs):
     # Update mixer but peak meters
     updateMixer()
 
+    # Tell the device if a mixer track is selected or not
+    if ui.getFocused(midi.widMixer) == True:
+        nihia.mixerSendInfoSelected("SELECTED", "GENERIC")
+
+    if ui.getFocused(midi.widMixer) == False:
+        nihia.mixerSendInfoSelected("SELECTED", "EMPTY")
 
 
 def OnUpdateMeters():
