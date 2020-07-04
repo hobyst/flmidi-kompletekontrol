@@ -135,6 +135,13 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
 
         if dataType == "SELECTED":
             nihia.mixerSendInfo("SELECTED", x - trackFirst, value=mixer.isTrackSelected(x))
+        
+        if dataType == "VOLUME_GRAPH":
+            nihia.mixerSetGraph(x - trackFirst, "VOLUME", mixer.getTrackVolume(x))
+        
+        if dataType == "PAN_GRAPH":
+            nihia.mixerSetGraph(x - trackFirst, "PAN", mixer.getTrackPan(x))
+
 
 
 def updateMixer():
@@ -145,6 +152,11 @@ def updateMixer():
     updateMixerTracks("PAN",mixer.trackNumber())
     updateMixerTracks("IS_MUTE",mixer.trackNumber())
     updateMixerTracks("IS_SOLO",mixer.trackNumber())
+
+    # Update fader visualization on S-Series keyboards
+    if DEVICE_SERIES == "S_SERIES":
+        updateMixerTracks("VOLUME_GRAPH",mixer.trackNumber())
+        updateMixerTracks("PAN_GRAPH",mixer.trackNumber())
 
 
 def adjustMixer(knob: int, dataType: str, action: str, selectedTrack: int):
