@@ -116,15 +116,15 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
     
         if dataType == "PAN":
             # Centered
-            if mixer.getTrackPan(x) == 0:
+            if math.trunc(mixer.getTrackPan(x)) == 0:
                 nihia.mixerSendInfo("PAN", x - trackFirst, info="Centered")
             
             # Right
-            elif mixer.getTrackPan(x) > 1:
-                nihia.mixerSendInfo("PAN", x - trackFirst, info=str(round((abs(mixer.getTrackPan(x)) * 100))) + "% Right")
+            if mixer.getTrackPan(x) > 0:
+                nihia.mixerSendInfo("PAN", x - trackFirst, info=str(round((abs(mixer.getTrackPan(x)) * 100))) + "% " + "Right")
 
             # Left
-            elif mixer.getTrackPan(x) < 1:
+            if mixer.getTrackPan(x) < 0:
                 nihia.mixerSendInfo("PAN", x - trackFirst, info=str(round((abs(mixer.getTrackPan(x)) * 100))) + "% " + "Left")
 
         if dataType == "IS_MUTE":
