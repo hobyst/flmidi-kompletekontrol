@@ -5,7 +5,7 @@ This script aims to support all the features of this mode, offering the same fea
 
 For installation know-how and info on how to use the script, go to the wiki of the repository.
 
-## Features
+## Main features
  - Takes advantage of the DAW integration mode
  - Playback control right from the device
  - Full mixer support, including peak meters on S-Series MK2 devices
