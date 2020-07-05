@@ -286,18 +286,22 @@ def updatePeak(selectedTrack: int):
 def OnMidiIn(event):
     # Play button
     if event.data1 == nihia.buttons.get("PLAY"):
+        event.handled = True
         transport.start()
 
     # Restart button
     if event.data1 == nihia.buttons.get("RESTART"):
+        event.handled = True
         transport.setLoopMode()
 
     # Record button
     if event.data1 == nihia.buttons.get("REC"):
+        event.handled = True
         transport.record()
     
     # Count-In button
     if event.data1 == nihia.buttons.get("COUNT_IN"):
+        event.handled = True
         
         # Defines the standard behaviour (just to toggle "Countdown before recording" on/off)
         if COUNT_IN_BEHAVIOUR == 0:
@@ -323,6 +327,7 @@ def OnMidiIn(event):
 
     # Stop button
     if event.data1 == nihia.buttons.get("STOP"):
+        event.handled = True
         transport.stop()
 
     # Clear button
@@ -333,27 +338,33 @@ def OnMidiIn(event):
     # However, since the MIDI API on FL Studio doesn't allow control over the piano roll specifically, for now it will only just
     # emulate the delete button (which does the same)
     if event.data1 == nihia.buttons.get("CLEAR"):
+        event.handled = True
         ui.delete()
     
     # Loop button (toggles loop recording on/off)
     if event.data1 == nihia.buttons.get("LOOP"):
+        event.handled = True
         transport.globalTransport(midi.FPT_LoopRecord, 1)
 
     # Metronome button
     if event.data1 == nihia.buttons.get("METRO"):
+        event.handled = True
         transport.globalTransport(midi.FPT_Metronome, 1)
     
     # Tempo button
     if event.data1 == nihia.buttons.get("TEMPO"):
+        event.handled = True
         transport.globalTransport(midi.FPT_TapTempo, 1)
 
 
     # Undo button
     if event.data1 == nihia.buttons.get("UNDO"):
+        event.handled = True
         general.undoUp()
     
     # Redo button
     if event.data1 == nihia.buttons.get("REDO"):
+        event.handled = True
         general.undo()
 
     
@@ -378,6 +389,7 @@ def OnMidiIn(event):
     # 
     # Alternative implementation: Emulate the Fn buttons
     if event.data1 == nihia.buttons.get("QUANTIZE"):
+        event.handled = True
         global window2
         window2 += 1
 
@@ -402,29 +414,35 @@ def OnMidiIn(event):
     # 
     # Instead, it shows the full-screen plugin browser
     if event.data1 == nihia.buttons.get("AUTO"):
+        event.handled = True
         transport.globalTransport(midi.FPT_F8, 1)
 
 
     # Mute button - A-Series
     if event.data1 == nihia.buttons.get("MUTE_SELECTED"):
+        event.handled = True
         mixer.muteTrack(mixer.trackNumber())
 
     # Solo button - A-Series
     if event.data1 == nihia.buttons.get("SOLO_SELECTED"):
+        event.handled = True
         mixer.soloTrack(mixer.trackNumber())
 
     # Mute button - S-Series
     if event.data1 == nihia.buttons.get("MUTE"):
+        event.handled = True
         mixerMuteSoloHandler("MUTE", event.data2, mixer.trackNumber())
 
     # Solo button - S-Series
     if event.data1 == nihia.buttons.get("SOLO"):
+        event.handled = True
         mixerMuteSoloHandler("SOLO", event.data2, mixer.trackNumber())
 
 
 
     # 4D Encoder +
     if event.data1 == nihia.buttons.get("ENCODER_GENERAL") and event.data2 == nihia.buttons.get("PLUS"):
+        event.handled = True
         
         # Mixer navigation (right)
         if ui.getFocused(midi.widMixer) == True:
@@ -440,6 +458,7 @@ def OnMidiIn(event):
     
     # 4D Encoder -
     if event.data1 == nihia.buttons.get("ENCODER_GENERAL") and event.data2 == nihia.buttons.get("MINUS"):
+        event.handled = True
         
         # Mixer navigation
         if ui.getFocused(midi.widMixer) == True:
@@ -454,31 +473,38 @@ def OnMidiIn(event):
     
     # 4D Encoder + (selected track volume)
     if event.data1 == nihia.buttons.get("ENCODER_VOLUME_SELECTED") and event.data2 == nihia.buttons.get("PLUS"):
+        event.handled = True
         mixer.setTrackVolume(mixer.trackNumber(), mixer.getTrackVolume(mixer.trackNumber()) + 0.01)
     
     # 4D Encoder - (selected track volume)
     if event.data1 == nihia.buttons.get("ENCODER_VOLUME_SELECTED") and event.data2 == nihia.buttons.get("MINUS"):
+        event.handled = True
         mixer.setTrackVolume(mixer.trackNumber(), mixer.getTrackVolume(mixer.trackNumber()) - 0.01)
 
     
     # 4D Encoder + (selected track pan)
     if event.data1 == nihia.buttons.get("ENCODER_PAN_SELECTED") and event.data2 == nihia.buttons.get("PLUS"):
+        event.handled = True
         mixer.setTrackPan(mixer.trackNumber(), mixer.getTrackPan(mixer.trackNumber()) + 0.01)
     
     # 4D Encoder + (selected track pan)
     if event.data1 == nihia.buttons.get("ENCODER_PAN_SELECTED") and event.data2 == nihia.buttons.get("MINUS"):
+        event.handled = True
         mixer.setTrackPan(mixer.trackNumber(), mixer.getTrackPan(mixer.trackNumber()) - 0.01)
     
     # 4D Encoder up
     if event.data1 == encoderHandler("Y") and event.data2 == nihia.buttons.get("UP"):
+        event.handled = True
         ui.up()
 
     # 4D Encoder down 
     if event.data1 == encoderHandler("Y") and event.data2 == nihia.buttons.get("DOWN"):
+        event.handled = True
         ui.down()
 
     # 4D Encoder (using FPT because ui.left doesn't work on the playlist)
     if event.data1 == encoderHandler("X") and event.data2 == nihia.buttons.get("LEFT"):
+        event.handled = True
         if ui.getFocused(midi.widMixer) == True:
             # This one doesn't move the mixer view as you get to the border
             # ----------------------------------------------------
@@ -492,6 +518,7 @@ def OnMidiIn(event):
 
     # 4D Encoder (using FPT because ui.right doesn't work on the playlist)
     if event.data1 == encoderHandler("X") and event.data2 == nihia.buttons.get("RIGHT"):
+        event.handled = True
         if ui.getFocused(midi.widMixer) == True:
             # This one doesn't move the mixer view as you get to the border
             # ----------------------------------------------------
@@ -505,109 +532,142 @@ def OnMidiIn(event):
 
     # 4D Encoder button
     if event.data1 == nihia.buttons.get("ENCODER_BUTTON"):
+        event.handled = True
         ui.enter()
 
     # Knobs
     # Normal knobs - increase values
     if event.data1 == nihia.knobs.get("KNOB_1A") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(0, "VOLUME", "INCREASE", mixer.trackNumber())
     
     if event.data1 == nihia.knobs.get("KNOB_2A") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(1, "VOLUME", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_3A") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(2, "VOLUME", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_4A") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(3, "VOLUME", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_5A") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(4, "VOLUME", "INCREASE", mixer.trackNumber())
     
     if event.data1 == nihia.knobs.get("KNOB_6A") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(5, "VOLUME", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_7A") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(6, "VOLUME", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_8A") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(7, "VOLUME", "INCREASE", mixer.trackNumber())
     
     # Normal knobs - decrease values
     if event.data1 == nihia.knobs.get("KNOB_1A") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(0, "VOLUME", "DECREASE", mixer.trackNumber())
     
     if event.data1 == nihia.knobs.get("KNOB_2A") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(1, "VOLUME", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_3A") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(2, "VOLUME", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_4A") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(3, "VOLUME", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_5A") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(4, "VOLUME", "DECREASE", mixer.trackNumber())
     
     if event.data1 == nihia.knobs.get("KNOB_6A") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(5, "VOLUME", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_7A") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(6, "VOLUME", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_8A") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(7, "VOLUME", "DECREASE", mixer.trackNumber())
 
 
     
     # Shifted knobs - increase values
     if event.data1 == nihia.knobs.get("KNOB_1B") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(0, "PAN", "INCREASE", mixer.trackNumber())
     
     if event.data1 == nihia.knobs.get("KNOB_2B") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(1, "PAN", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_3B") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(2, "PAN", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_4B") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(3, "PAN", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_5B") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(4, "PAN", "INCREASE", mixer.trackNumber())
     
     if event.data1 == nihia.knobs.get("KNOB_6B") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(5, "PAN", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_7B") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(6, "PAN", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("INCREASE"):
+        event.handled = True
         adjustMixer(7, "PAN", "INCREASE", mixer.trackNumber())
     
     # Shifted knobs - decrease values
     if event.data1 == nihia.knobs.get("KNOB_1B") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(0, "PAN", "DECREASE", mixer.trackNumber())
     
     if event.data1 == nihia.knobs.get("KNOB_2B") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(1, "PAN", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_3B") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(2, "PAN", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_4B") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(3, "PAN", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_5B") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(4, "PAN", "DECREASE", mixer.trackNumber())
     
     if event.data1 == nihia.knobs.get("KNOB_6B") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(5, "PAN", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_7B") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(6, "PAN", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("DECREASE"):
+        event.handled = True
         adjustMixer(7, "PAN", "DECREASE", mixer.trackNumber())
 
 
