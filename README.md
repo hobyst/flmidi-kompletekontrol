@@ -3,67 +3,25 @@ Implementation of the deep integration mode found on Native Instruments' Komplet
 
 This script aims to support all the features of this mode, offering the same features found on supported DAWs like Ableton Live or Logic Pro X.
 
-## Installing the script
+For installation know-how and info on how to use the script, go to the wiki of the repository.
 
-On Windows
-```bat
-cd "%USERPROFILE%\Documents\Image-Line\FL Studio\Settings\Hardware"
+## Features
+ - Takes advantage of the DAW integration mode
+ - Playback control right from the device
+ - Full mixer support, including peak meters on S-Series MK2 devices
 
-REM Download the latest stable release
-git clone https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-
-REM Download the latest beta version (might have bugs)
-git clone -b beta https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-
-REM Download the latest alpha version (it will have bugs for sure)
-git clone -b dev https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-```
-On macOS
-```bash
-cd "Documents/Image-Line/FL Studio/Settings/Hardware/"
-
-# Download the latest stable release
-git clone https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-
-# Download the latest beta version (might have bugs)
-git clone -b beta https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-
-# Download the latest alpha version (it will have bugs for sure)
-git clone -b dev https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-```
-
-## Updating the script
-
-On Windows
-```bat
-cd "%USERPROFILE%\Documents\Image-Line\FL Studio\Settings\Hardware"
-
-REM Removes the old version of the script
-rmdir /Q /S "Native Instruments Komplete Kontrol"
-
-REM Download the latest stable release
-git clone https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-
-REM Download the latest beta version (might have bugs)
-git clone -b beta https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-
-REM Download the latest alpha version (it will have bugs for sure)
-git clone -b dev https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-```
-
-On macOS
-```bash
-cd "Documents/Image-Line/FL Studio/Settings/Hardware/"
-
-# Removes the old version of the script
-rm -r "Native Instruments Komplete Kontrol"
-
-# Download the latest stable release
-git clone https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-
-# Download the latest beta version (might have bugs)
-git clone -b beta https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-
-# Download the latest alpha version (it will have bugs for sure)
-git clone -b dev https://github.com/hobyst/flmidi-kompletekontrol.git --recurse-submodules "Native Instruments Komplete Kontrol"
-```
+## Compatible devices
+### Komplete Kontrol
+ - [x] Komplete Kontrol A25/49/61
+ - [x] Komplete Kontrol M32 (works the same way A-Series do)
+ - [x] Komplete Kontrol S49/61/88 MK2
+ - [ ] Komplete Kontrol S49/49/61/88 MK1 (supposed to work as A-Series, not tested)
+### Maschine
+As of today, this script hasn't been tested on Maschine devices. However, some might work due to their similarities in functionality with Komplete Kontrol keyboards.
+ - [ ] Maschine MK3 (supposed to work as S-Series MK2, but not tested yet)
+ - [ ] Maschine Studio (supposed to work as S-Series MK2, but not tested yet)
+ - [ ] Maschine MK2
+ - [ ] Maschine MK1
+ - [ ] Maschine Mikro MK3 (supposed to work as A-Series, not tested)
+ - [ ] Maschine Mikro MK2
+ - [ ] Maschine Mikro MK1
