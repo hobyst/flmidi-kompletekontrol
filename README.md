@@ -25,3 +25,8 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
  - [ ] Maschine Mikro MK3 (supposed to work as A-Series, not tested)
  - [ ] Maschine Mikro MK2
  - [ ] Maschine Mikro MK1
+
+## Known issues
+ - **Performance issues:** In certain situations, actions coming from the device into FL Studio might get up to 5 seconds to have an effect on FL Studio. However, it doesn't affect performance of the software in any way neither on note input (MIDI and DAW Control instructions are sent by different MIDI devices). The delay is only for input processing coming from the button panel at the top of the device and a fix is being developed for this.
+ - **Automatic Komplete Kontrol instance switching:** It is already implemented in the compatibility layer, but the info that is needed from FL Studio to do so can't be gotten with the current API scope. Waiting for Image-Line to add plugin parameter read/write capabilities to the API for this.
+ - **Manual Komplete Kontrol instance switching:** In S-Series devices, DAW integration seems to disable the option to switch instances manually using the keyboard, relying on the host DAW to tell the device which instance to control. Due to the automatic instance switching not being compatible with FL Studio at the moment, it might be that the only way to change instances for S-Series users once the DAW integration has ben initiated is to do it manually with a mouse.
