@@ -1,5 +1,5 @@
 # name=Native Instruments Komplete Kontrol
-# url = 
+# url=https://github.com/hobyst/flmidi-kompletekontrol/wiki
 
 import patterns
 import mixer
