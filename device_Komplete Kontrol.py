@@ -672,7 +672,7 @@ def OnMidiIn(event):
     if event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("DECREASE"):
         event.handled = True
         adjustMixer(7, "PAN", "DECREASE", mixer.trackNumber())
-
+    
 ######################################################################################################################
 # Script logic
 ######################################################################################################################
@@ -702,7 +702,9 @@ def OnInit():
     # Sets the lights of the 4D Encoder on S-Series keyboards on
     if DEVICE_SERIES == "S_SERIES":
         nihia.buttonSetLight("ENCODER_X_S", 1)
+        nihia.buttonSetLight("ENCODER_X_S", 127)
         nihia.buttonSetLight("ENCODER_Y_S", 1)
+        nihia.buttonSetLight("ENCODER_Y_S", 127)
 
     # Updates the device mixer
     updateMixer()
