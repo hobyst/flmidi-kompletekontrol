@@ -23,10 +23,10 @@ For installation know-how and info on how to use the script, go to the wiki of t
 - [x] Komplete Kontrol S49/61/88 MK2
 
 - [ ] Komplete Kontrol S25/49/61/88 MK1 (supposed to work as A-Series, not tested)
-  
-  ### Maschine
-  
-  As of today, this script hasn't been tested on Maschine devices. However, some might work due to their similarities in functionality with Komplete Kontrol keyboards.
+
+### Maschine
+
+As of today, this script hasn't been tested on Maschine devices. However, some might work due to their similarities in functionality with Komplete Kontrol keyboards.
 
 - [ ] Maschine MK3 (supposed to work as S-Series MK2, not tested)
 
@@ -55,3 +55,5 @@ For installation know-how and info on how to use the script, go to the wiki of t
 - **Automatic Komplete Kontrol instance switching:** It is already implemented in the compatibility layer, but the info that is needed from FL Studio to do so can't be gotten with the current API scope. Waiting for Image-Line to add plugin parameter read/write capabilities to the API for this.
 
 - **Manual Komplete Kontrol instance switching:** In S-Series devices, DAW integration seems to disable the option to switch instances manually using the keyboard, relying on the host DAW to tell the device which instance to control. Due to the automatic instance switching not being compatible with FL Studio at the moment, it might be that the only way to change instances for S-Series users once the DAW integration has ben initiated is to do it manually with a mouse.
+
+- **QUANTIZE and AUTO buttons don't work as expected:** Quantize and toggling automation recording on/off isn't supported yet on the actual MIDI API scope. There's a workaround to get to the quantize buttons by getting into the menus and emulating key pressings but it's slow and buggy.
