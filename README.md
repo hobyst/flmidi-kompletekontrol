@@ -57,3 +57,13 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
 - **Manual Komplete Kontrol instance switching:** In S-Series devices, DAW integration seems to disable the option to switch instances manually using the keyboard, relying on the host DAW to tell the device which instance to control. Due to the automatic instance switching not being compatible with FL Studio at the moment, it might be that the only way to change instances for S-Series users once the DAW integration has ben initiated is to do it manually with a mouse.
 
 - **QUANTIZE and AUTO buttons don't work as expected:** Quantize and toggling automation recording on/off isn't supported yet on the actual MIDI API scope. There's a workaround to get to the quantize buttons by getting into the menus and emulating key pressings but it's slow and buggy. Instead, they switch between windows (browser isn't included on this) and trigger full-screen plugin browser respectively.
+
+## Special thanks
+
+- [Duwayne Wright](https://github.com/soundwrightpro): Coding help
+
+- [B3NYBOI](https://www.youtube.com/channel/UC8C58LOA00jy600kt6h1hTw/): Early testing
+
+- Tunz Amazing: Early testing
+
+- [Jürgen Moßgraber](https://github.com/git-moss): Implementation reference
