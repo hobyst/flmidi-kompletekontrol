@@ -44,7 +44,7 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
 
 ## Known issues
 
-- **4D Encoder's built-in D-pad axis might be inverted:** A-Series and S-Series have their encoder axis inverted and by default, the script maps encoder events as if you were using a S-Series device. You can solve this by opening going to the script folder and inside the `device_Komplete Kontrol.py` set `DEVICE_SERIES` to the kind of the device you are using. If you have more than one NI device and don't want to make multiple files for that, you can set it on runtime by going to View > Script output, selecting the name of the MIDI device that isn't acting as expected and run the following line:
+- **4D Encoder's built-in D-pad axis might be inverted:** A-Series and S-Series have their encoder axis inverted and by default, the script maps encoder events as if you were using a S-Series device. Since there's no way to get the name of the MIDI device the script is running on, you have to specify this by yourself going to the script folder and inside the `device_Komplete Kontrol.py` file, set `DEVICE_SERIES` to the kind of the device you are using. If you have more than one NI device and don't want to make multiple files for that, you can set it on runtime by going to View > Script output, selecting the name of the MIDI device that isn't acting as expected and run the following line:
   
   ```python
    DEVICE_SERIES = "<series of your device>"
