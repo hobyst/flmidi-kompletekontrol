@@ -66,4 +66,6 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
 
 - Tunz Amazing: Early testing
 
+- Juanpe: Early testing
+
 - [Jürgen Moßgraber](https://github.com/git-moss): Implementation reference
