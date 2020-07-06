@@ -44,7 +44,7 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
 
 ## Known issues
 
-- ~~**Performance issues:** In certain situations, actions coming from the device into FL Studio might get up to 5 seconds to have an effect on FL Studio. However, it doesn't affect performance of the software in any way neither on note input (MIDI and DAW Control instructions are sent by different MIDI devices). The delay is only for input processing coming from the button panel at the top of the device and a fix is being developed for this.~~ Solved by using multi-threading.
+- 
 
 - **4D Encoder's built-in D-pad axis might be inverted:** A-Series and S-Series have their encoder axis inverted and by default, the script maps encoder events as if you were using a S-Series device. You can solve this by opening going to the script folder and inside the `device_Komplete Kontrol.py` set `DEVICE_SERIES` to the kind of the device you are using. If you have more than one NI device and don't want to make multiple files for that, you can set it on runtime by going to View > Script output, selecting the name of the MIDI device that isn't acting as expected and run the following line:
   
