@@ -281,6 +281,7 @@ def updatePeak(selectedTrack: int):
     # Sends the values to the device
     nihia.mixerSendInfo("PEAK", 0, peakValues = peakList)
 
+
 ######################################################################################################################
 # Button to action definitions
 ######################################################################################################################
