@@ -64,6 +64,6 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
 
 - [Tunz Amazin](https://twitter.com/HearMyTunz): Early testing
 
-- Juanpe: Early testing
+- [Juanpe](https://www.youtube.com/channel/UC_3ONcvDjAyr1POm2ieefPg/): Early testing
 
 - [Jürgen Moßgraber](https://github.com/git-moss): Implementation reference
