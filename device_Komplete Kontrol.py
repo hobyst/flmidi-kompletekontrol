@@ -794,17 +794,17 @@ def TOnRefresh(HW_Dirty_LEDs):
 
     # MUTE button
     if mixer.isTrackMuted(mixer.trackNumber()) == True:
-        nihia.buttonSetLight("MUTE", 1)
+        nihia.buttonSetLight("MUTE_SELECTED", 1)
 
     if mixer.isTrackMuted(mixer.trackNumber()) == False:
-        nihia.buttonSetLight("MUTE", 0)
+        nihia.buttonSetLight("MUTE_SELECTED", 0)
     
     # SOLO button
     if mixer.isTrackSolo(mixer.trackNumber()) == True:
-        nihia.buttonSetLight("SOLO", 1)
+        nihia.buttonSetLight("SOLO_SELECTED", 1)
 
     if mixer.isTrackSolo(mixer.trackNumber()) == False:
-        nihia.buttonSetLight("SOLO", 0)
+        nihia.buttonSetLight("SOLO_SELECTED", 0)
     
     # Update mixer but peak meters
     updateMixer()
