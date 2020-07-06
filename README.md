@@ -65,3 +65,5 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
 - [B3NYBOI](https://www.youtube.com/channel/UC8C58LOA00jy600kt6h1hTw/): Early testing
 
 - Tunz Amazing: Early testing
+
+- [Jürgen Moßgraber](https://github.com/git-moss): Implementation reference
