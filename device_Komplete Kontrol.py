@@ -181,10 +181,10 @@ def adjustMixer(knob: int, dataType: str, action: str, selectedTrack: int):
 
     if dataType == "VOLUME":
         if action == "INCREASE":
-            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + 0.01)
+            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + 0.02)
         
         if action == "DECREASE":
-            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - 0.01)
+            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - 0.02)
 
     if dataType == "PAN":
         if action == "INCREASE":
