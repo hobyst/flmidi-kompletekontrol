@@ -20,6 +20,8 @@ from nihia import nihia
 # Imports math library
 import math
 
+# Imports the low-level threading module
+import _thread
 
 ######################################################################################################################
 # User-editable constants for script customization
@@ -284,6 +286,7 @@ def updatePeak(selectedTrack: int):
 ######################################################################################################################
 
 def OnMidiIn(event):
+    """ Wrapper for the OnMidiIn thread. """
     # Play button
     if event.data1 == nihia.buttons.get("PLAY"):
         event.handled = True
@@ -669,8 +672,7 @@ def OnMidiIn(event):
     if event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("DECREASE"):
         event.handled = True
         adjustMixer(7, "PAN", "DECREASE", mixer.trackNumber())
-
-
+    
 ######################################################################################################################
 # Script logic
 ######################################################################################################################
@@ -700,7 +702,9 @@ def OnInit():
     # Sets the lights of the 4D Encoder on S-Series keyboards on
     if DEVICE_SERIES == "S_SERIES":
         nihia.buttonSetLight("ENCODER_X_S", 1)
+        nihia.buttonSetLight("ENCODER_X_S", 127)
         nihia.buttonSetLight("ENCODER_Y_S", 1)
+        nihia.buttonSetLight("ENCODER_Y_S", 127)
 
     # Updates the device mixer
     updateMixer()
@@ -727,7 +731,8 @@ def OnDeInit():
     # -------------------------------------------------------------------------------------------------------
 
 
-def OnIdle():
+def TOnIdle():
+    """ Wrapper for the OnInit thread. """
     # Updates the LED of the CLEAR button (moved to OnIdle, since OnRefresh isn't called when focused window changes)
     if ui.getFocused(midi.widPianoRoll) == True:
         nihia.buttonSetLight("CLEAR", 1)
@@ -735,10 +740,13 @@ def OnIdle():
     if ui.getFocused(midi.widPianoRoll) == False:
         nihia.buttonSetLight("CLEAR", 0)
 
+def OnIdle():
+    _thread.start_new_thread(TOnIdle, ())
 
 
 # Updates the LEDs and the mixer
-def OnRefresh(HW_Dirty_LEDs):
+def TOnRefresh(HW_Dirty_LEDs):
+    """ Wrapper for the OnRefresh thread. """
     # PLAY button
     if transport.isPlaying() == True:
         nihia.buttonSetLight("PLAY", 1)
@@ -809,11 +817,18 @@ def OnRefresh(HW_Dirty_LEDs):
     # if ui.getFocused(midi.widMixer) == False:
     #     nihia.mixerSendInfoSelected("SELECTED", "EMPTY")
 
+def OnRefresh(HW_Dirty_LEDs):
+    _thread.start_new_thread(TOnRefresh, (HW_Dirty_LEDs,))
 
-def OnUpdateMeters():
+
+def TOnUpdateMeters():
+    """ Wrapper for the OnUpdateMeters thread. """
     # Update peak meters
     # TODO: Disabled due to performance issues (multi-threading support needed)
     # ----------------------------------------------
     if DEVICE_SERIES == "S_SERIES":
       updatePeak(mixer.trackNumber())
     # ----------------------------------------------
+
+def OnUpdateMeters():
+    _thread.start_new_thread(TOnUpdateMeters, ())
