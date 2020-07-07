@@ -21,7 +21,12 @@ from nihia import nihia
 import math
 
 # Imports the low-level threading module
-import _thread
+# If this fails because the script is being run on macOS (the macOS Python interpreter doesn't support it)
+# it will import _dummy_thread instead
+try:
+    import _thread
+except ImportError:
+    import lib._dummy_thread as _thread
 
 ######################################################################################################################
 # User-editable constants for script customization
