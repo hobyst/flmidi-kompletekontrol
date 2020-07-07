@@ -150,6 +150,37 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
             nihia.mixerSetGraph(x - trackFirst, "PAN", mixer.getTrackPan(x))
 
 
+    # Checks the track group once more to clean up the last two tracks
+    if trackGroup == 15:
+
+        if dataType == "NAME":
+            nihia.mixerSendInfo("NAME", 7, info="")
+        
+        # Track 7 --> Current
+        if dataType == "VOLUME":
+            nihia.mixerSendInfo("VOLUME", 6, info=" ")
+            nihia.mixerSendInfo("VOLUME", 7, info=" ")
+        
+        if dataType == "PAN":
+            nihia.mixerSendInfo("PAN", 6, info=" ")
+            nihia.mixerSendInfo("PAN", 7, info=" ")
+        
+        if dataType == "IS_MUTE":
+            nihia.mixerSendInfo("IS_MUTE", 6, value=0)
+            nihia.mixerSendInfo("IS_MUTE", 7, value=0)
+        
+        if dataType == "IS_SOLO":
+            nihia.mixerSendInfo("IS_SOLO", 6, value=0)
+            nihia.mixerSendInfo("IS_SOLO", 7, value=0)
+
+        if dataType == "VOLUME_GRAPH":
+            nihia.mixerSetGraph(6, "VOLUME", 0)
+            nihia.mixerSetGraph(7, "VOLUME", 0)
+        
+        if dataType == "PAN_GRAPH":
+            nihia.mixerSetGraph(6, "PAN", 0)
+            nihia.mixerSetGraph(7, "PAN", 0)
+
 
 def updateMixer():
     """ Updates every property of the mixer of the deivce but the peak values. """
