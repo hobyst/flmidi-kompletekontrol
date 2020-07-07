@@ -24,7 +24,15 @@ import math
 # threading module isn't supported by FL's interpreter but _thread does
 # However, using _thread makes FL crash eventually at launch on Windows and it isn't compatible with the macOS Python interpreter
 # Using _dummy_thread instead
-import lib._dummy_thread as _thread
+import sys
+
+if sys.platform == "win32":
+    print("Windows OS detected. Imported _thread module.")
+    import _thread
+
+if sys.platform == "darwin":
+    print("macOS detected. Imported _dummy_thread module.")
+    import lib._dummy_thread as _thread
 
 ######################################################################################################################
 # User-editable constants for script customization
