@@ -21,12 +21,10 @@ from nihia import nihia
 import math
 
 # Imports the low-level threading module
-# If this fails because the script is being run on macOS (the macOS Python interpreter doesn't support it)
-# it will import _dummy_thread instead
-try:
-    import _thread
-except ImportError:
-    import lib._dummy_thread as _thread
+# threading module isn't supported by FL's interpreter but _thread does
+# However, using _thread makes FL crash eventually at launch on Windows and it isn't compatible with the macOS Python interpreter
+# Using _dummy_thread instead
+import lib._dummy_thread as _thread
 
 ######################################################################################################################
 # User-editable constants for script customization
