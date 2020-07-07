@@ -1,3 +1,5 @@
+# Copyright © 2001-2020 Python Software Foundation; All Rights Reserved
+
 """Drop-in replacement for the thread module.
 
 Meant to be used as a brain-dead substitute so that threaded code does
