@@ -20,10 +20,10 @@ from nihia import nihia
 # Imports math library
 import math
 
-# Imports the low-level threading module
+# Imports the threading module
 # threading module isn't supported by FL's interpreter but _thread does
 # However, using _thread makes FL crash eventually at launch on Windows and it isn't compatible with the macOS Python interpreter
-# Using _dummy_thread instead
+# Using _dummy_thread instead on macOS and _thread on Windows
 import sys
 
 if sys.platform == "win32":
