@@ -21,7 +21,18 @@ from nihia import nihia
 import math
 
 # Imports the low-level threading module
-import _thread
+# threading module isn't supported by FL's interpreter but _thread does
+# However, using _thread makes FL crash eventually at launch on Windows and it isn't compatible with the macOS Python interpreter
+# Using _dummy_thread instead
+import sys
+
+if sys.platform == "win32":
+    print("Windows OS detected. Imported _thread module.")
+    import _thread
+
+if sys.platform == "darwin":
+    print("macOS detected. Imported _dummy_thread module.")
+    import lib._dummy_thread as _thread
 
 ######################################################################################################################
 # User-editable constants for script customization
@@ -145,6 +156,37 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
             nihia.mixerSetGraph(x - trackFirst, "PAN", mixer.getTrackPan(x))
 
 
+    # Checks the track group once more to clean up the last two tracks
+    if trackGroup == 15:
+
+        if dataType == "NAME":
+            nihia.mixerSendInfo("NAME", 7, info="")
+        
+        # Track 7 --> Current
+        if dataType == "VOLUME":
+            nihia.mixerSendInfo("VOLUME", 6, info=" ")
+            nihia.mixerSendInfo("VOLUME", 7, info=" ")
+        
+        if dataType == "PAN":
+            nihia.mixerSendInfo("PAN", 6, info=" ")
+            nihia.mixerSendInfo("PAN", 7, info=" ")
+        
+        if dataType == "IS_MUTE":
+            nihia.mixerSendInfo("IS_MUTE", 6, value=0)
+            nihia.mixerSendInfo("IS_MUTE", 7, value=0)
+        
+        if dataType == "IS_SOLO":
+            nihia.mixerSendInfo("IS_SOLO", 6, value=0)
+            nihia.mixerSendInfo("IS_SOLO", 7, value=0)
+
+        if dataType == "VOLUME_GRAPH":
+            nihia.mixerSetGraph(6, "VOLUME", 0)
+            nihia.mixerSetGraph(7, "VOLUME", 0)
+        
+        if dataType == "PAN_GRAPH":
+            nihia.mixerSetGraph(6, "PAN", 0)
+            nihia.mixerSetGraph(7, "PAN", 0)
+
 
 def updateMixer():
     """ Updates every property of the mixer of the deivce but the peak values. """
@@ -181,10 +223,10 @@ def adjustMixer(knob: int, dataType: str, action: str, selectedTrack: int):
 
     if dataType == "VOLUME":
         if action == "INCREASE":
-            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + 0.01)
+            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + 0.02)
         
         if action == "DECREASE":
-            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - 0.01)
+            mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - 0.02)
 
     if dataType == "PAN":
         if action == "INCREASE":
@@ -567,11 +609,19 @@ def OnMidiIn(event):
 
     if event.data1 == nihia.knobs.get("KNOB_7A") and event.data2 == nihia.knobs.get("INCREASE"):
         event.handled = True
-        adjustMixer(6, "VOLUME", "INCREASE", mixer.trackNumber())
+        # Handles track group 15 exception
+        if math.trunc(1/8 * mixer.trackNumber()) == 15:
+            return
+        else:    
+            adjustMixer(6, "VOLUME", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_8A") and event.data2 == nihia.knobs.get("INCREASE"):
         event.handled = True
-        adjustMixer(7, "VOLUME", "INCREASE", mixer.trackNumber())
+        # Handles track group 15 exception
+        if math.trunc(1/8 * mixer.trackNumber()) == 15:
+            return
+        else: 
+            adjustMixer(7, "VOLUME", "INCREASE", mixer.trackNumber())
     
     # Normal knobs - decrease values
     if event.data1 == nihia.knobs.get("KNOB_1A") and event.data2 == nihia.knobs.get("DECREASE"):
@@ -600,11 +650,19 @@ def OnMidiIn(event):
 
     if event.data1 == nihia.knobs.get("KNOB_7A") and event.data2 == nihia.knobs.get("DECREASE"):
         event.handled = True
-        adjustMixer(6, "VOLUME", "DECREASE", mixer.trackNumber())
+        # Handles track group 15 exception
+        if math.trunc(1/8 * mixer.trackNumber()) == 15:
+            return
+        else: 
+            adjustMixer(6, "VOLUME", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_8A") and event.data2 == nihia.knobs.get("DECREASE"):
         event.handled = True
-        adjustMixer(7, "VOLUME", "DECREASE", mixer.trackNumber())
+        # Handles track group 15 exception
+        if math.trunc(1/8 * mixer.trackNumber()) == 15:
+            return
+        else: 
+            adjustMixer(7, "VOLUME", "DECREASE", mixer.trackNumber())
 
 
     
@@ -635,11 +693,19 @@ def OnMidiIn(event):
 
     if event.data1 == nihia.knobs.get("KNOB_7B") and event.data2 == nihia.knobs.get("INCREASE"):
         event.handled = True
-        adjustMixer(6, "PAN", "INCREASE", mixer.trackNumber())
+        # Handles track group 15 exception
+        if math.trunc(1/8 * mixer.trackNumber()) == 15:
+            return
+        else: 
+            adjustMixer(6, "PAN", "INCREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("INCREASE"):
         event.handled = True
-        adjustMixer(7, "PAN", "INCREASE", mixer.trackNumber())
+        # Handles track group 15 exception
+        if math.trunc(1/8 * mixer.trackNumber()) == 15:
+            return
+        else: 
+            adjustMixer(7, "PAN", "INCREASE", mixer.trackNumber())
     
     # Shifted knobs - decrease values
     if event.data1 == nihia.knobs.get("KNOB_1B") and event.data2 == nihia.knobs.get("DECREASE"):
@@ -668,11 +734,19 @@ def OnMidiIn(event):
 
     if event.data1 == nihia.knobs.get("KNOB_7B") and event.data2 == nihia.knobs.get("DECREASE"):
         event.handled = True
-        adjustMixer(6, "PAN", "DECREASE", mixer.trackNumber())
+        # Handles track group 15 exception
+        if math.trunc(1/8 * mixer.trackNumber()) == 15:
+            return
+        else: 
+            adjustMixer(6, "PAN", "DECREASE", mixer.trackNumber())
 
     if event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("DECREASE"):
         event.handled = True
-        adjustMixer(7, "PAN", "DECREASE", mixer.trackNumber())
+        # Handles track group 15 exception
+        if math.trunc(1/8 * mixer.trackNumber()) == 15:
+            return
+        else: 
+            adjustMixer(7, "PAN", "DECREASE", mixer.trackNumber())
     
 ######################################################################################################################
 # Script logic
