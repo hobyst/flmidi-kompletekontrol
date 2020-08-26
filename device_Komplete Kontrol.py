@@ -34,6 +34,7 @@ if sys.platform == "darwin":
     print("macOS detected. Imported _dummy_thread module.")
     import lib._dummy_thread as _thread
 
+
 ######################################################################################################################
 # User-editable constants for script customization
 # Edit this ones to make the script act as you wish
@@ -322,6 +323,33 @@ def updatePeak(selectedTrack: int):
 
     # Sends the values to the device
     nihia.mixerSendInfo("PEAK", 0, peakValues = peakList)
+
+
+def detectDevice():
+    """ Gets the MIDI device name from FL Studio and sets `DEVICE_SERIES` to the right value in order for the script to work properly. """
+
+    # Imports DEVICE_SERIES from the global scope
+    global DEVICE_SERIES
+
+    # Retrieves the device name from FL Studio
+    deviceName = device.getName()
+
+    # Sets DEVICE_NAME depending on the retrieved name
+    if deviceName == "Komplete Kontrol A DAW":
+        DEVICE_SERIES = "A_SERIES"
+        print("Detected device: Komplete Kontrol A-Series")
+    
+    elif deviceName == "Komplete Kontrol M DAW":
+        DEVICE_SERIES = "M_SERIES"
+        print("Detected device: Komplete Kontrol M-Series")
+    
+    elif deviceName[21] == "-":     # Gets the 18th char on the name to see if it matches the "Komplete Kontrol DAW - X" naming scheme S-Series devices follow
+        DEVICE_SERIES = "S_SERIES"
+        print("Detected device: Komplete Kontrol S-Series")
+    
+    else:
+        DEVICE_SERIES = "S_SERIES"
+        print("Device detection failed. Going with Komplete Kontrol S-Series.")
 
 
 ######################################################################################################################
@@ -753,7 +781,9 @@ def OnMidiIn(event):
 ######################################################################################################################
 
 def OnInit():
-
+    # Detects the device the script is running on
+    detectDevice()
+    
     # Tells to FL Studio the device has peak meters
     device.setHasMeters()
 
