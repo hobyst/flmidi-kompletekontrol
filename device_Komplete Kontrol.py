@@ -333,6 +333,13 @@ def detectDevice():
     # Retrieves the device name from FL Studio
     deviceName = device.getName()
 
+    # Saves the 22th character of the device name for the S-Series check to isolate the extraction and avoid errors stopping the execution of the script
+    char21 = None
+    try:
+        char21 = deviceName[21]
+    except:
+        char21 = None
+
     # Sets DEVICE_NAME depending on the retrieved name
     if deviceName == "Komplete Kontrol A DAW":
         DEVICE_SERIES = "A_SERIES"
@@ -342,13 +349,12 @@ def detectDevice():
         DEVICE_SERIES = "M_SERIES"
         print("Detected device: Komplete Kontrol M-Series")
     
-    elif deviceName[21] == "-":     # Gets the 18th char on the name to see if it matches the "Komplete Kontrol DAW - X" naming scheme S-Series devices follow
+    elif char21 == "-":     # Gets the 18th char on the name to see if it matches the "Komplete Kontrol DAW - X" naming scheme S-Series devices follow
         DEVICE_SERIES = "S_SERIES"
         print("Detected device: Komplete Kontrol S-Series")
     
     else:
-        DEVICE_SERIES = "S_SERIES"
-        print("Device detection failed. Going with Komplete Kontrol S-Series.")
+        print("Device detection failed. Going with the manually specified device on the script:", DEVICE_SERIES)
 
 
 ######################################################################################################################
