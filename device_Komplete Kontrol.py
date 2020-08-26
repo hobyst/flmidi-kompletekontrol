@@ -85,15 +85,14 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
     # If the selected track belongs to the 16th group, it will declare the last two tracks as non existant
     # Otherwise, it will declare all as existant
     if trackGroup == 15:
-        for x in range(trackFirst, trackFirst + 8):
-            nihia.mixerSendInfo("EXIST", 0, value=1)
-            nihia.mixerSendInfo("EXIST", 1, value=1)
-            nihia.mixerSendInfo("EXIST", 2, value=1)
-            nihia.mixerSendInfo("EXIST", 3, value=1)
-            nihia.mixerSendInfo("EXIST", 4, value=1)
-            nihia.mixerSendInfo("EXIST", 5, value=1)
-            nihia.mixerSendInfo("EXIST", 6, value=0)
-            nihia.mixerSendInfo("EXIST", 7, value=0)
+        nihia.mixerSendInfo("EXIST", 0, value=1)
+        nihia.mixerSendInfo("EXIST", 1, value=1)
+        nihia.mixerSendInfo("EXIST", 2, value=1)
+        nihia.mixerSendInfo("EXIST", 3, value=1)
+        nihia.mixerSendInfo("EXIST", 4, value=1)
+        nihia.mixerSendInfo("EXIST", 5, value=1)
+        nihia.mixerSendInfo("EXIST", 6, value=0)
+        nihia.mixerSendInfo("EXIST", 7, value=0)
     
     else:
         for x in range(trackFirst, trackFirst + 8):
@@ -159,8 +158,8 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
 
     # Checks the track group once more to clean up the last two tracks
     if trackGroup == 15:
-
         if dataType == "NAME":
+            nihia.mixerSendInfo("NAME", 6, info="")
             nihia.mixerSendInfo("NAME", 7, info="")
         
         # Track 7 --> Current
