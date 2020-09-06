@@ -4,7 +4,7 @@ Implementation of the deep integration mode found on Native Instruments' Komplet
 
 This script aims to support all the features of this mode, offering the same features found on supported DAWs like Ableton Live or Logic Pro X.
 
-For installation know-how and info on how to use the script, go to the wiki of the repository.
+For installation know-how and info on how to use the script, go to the [wiki](https://github.com/hobyst/flmidi-kompletekontrol/wiki) of the repository.
 
 ## Main features
 
@@ -36,7 +36,7 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
 
 - [ ] Maschine MK1
 
-- [ ] Maschine Mikro MK3 (supposed to work as A-Series, not tested)
+- [ ] ~~Maschine Mikro MK3~~ (doesn't have DAW integration mode)
 
 - [ ] Maschine Mikro MK2
 
@@ -44,17 +44,13 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
 
 ## Known issues
 
-- **4D Encoder's built-in D-pad axis might be inverted:** A-Series and S-Series have their encoder axis inverted and by default, the script maps encoder events as if you were using a S-Series device. Since there's no way to get the name of the MIDI device the script is running on, you have to specify this by yourself going to the script folder and inside the `device_Komplete Kontrol.py` file, set `DEVICE_SERIES` to the kind of the device you are using. If you have more than one NI device and don't want to make multiple files for that, you can set it on runtime by going to View > Script output, selecting the name of the MIDI device that isn't acting as expected and run the following line:
-  
-  ```python
-   DEVICE_SERIES = "<series of your device>"
-  ```
+- [**Performance issues on FL Studio 20.7.2 and up (Windows):**](https://github.com/hobyst/flmidi-kompletekontrol/issues/8) On FL Studio 20.7.2 and upwards, a bug was discovered that makes the script not to work sometimes and causes a performance drawback due to the constant error printing on the Script output. The only workaround for this is to reload the script if you notice any kind of performance issue. Go to `View > Script output > "the tab with the DAW device name on it"` and click on the `Reload script` button until the cascade stops and no errors seem to happen.
 
-- **Automatic Komplete Kontrol instance switching:** It is already implemented in the compatibility layer, but the info that is needed from FL Studio to do so can't be gotten with the current API scope. Waiting for Image-Line to add plugin parameter read/write capabilities to the API for this.
+- [**Automatic Komplete Kontrol instance switching:**](https://github.com/hobyst/flmidi-kompletekontrol/issues/3) It is already implemented in the compatibility layer, but the info that is needed from FL Studio to do so can't be gotten with the current API scope. Waiting for Image-Line to add plugin parameter read/write capabilities to the API for this.
 
-- **Manual Komplete Kontrol instance switching:** In S-Series devices, DAW integration seems to disable the option to switch instances manually using the keyboard, relying on the host DAW to tell the device which instance to control. Due to the automatic instance switching not being compatible with FL Studio at the moment, it might be that the only way to change instances for S-Series users once the DAW integration has ben initiated is to do it manually with a mouse.
+- [**Manual Komplete Kontrol instance switching:**](https://github.com/hobyst/flmidi-kompletekontrol/issues/4) In S-Series devices, DAW integration seems to disable the option to switch instances manually using the keyboard, relying on the host DAW to tell the device which instance to control. Due to the automatic instance switching not being compatible with FL Studio at the moment, it might be that the only way to change instances for S-Series users once the DAW integration has ben initiated is to do it manually with a mouse.
 
-- **QUANTIZE and AUTO buttons don't work as expected:** Quantize and toggling automation recording on/off isn't supported yet on the actual MIDI API scope. There's a workaround to get to the quantize buttons by getting into the menus and emulating key pressings but it's slow and buggy. Instead, they switch between windows (browser isn't included on this) and trigger full-screen plugin browser respectively.
+- [**QUANTIZE and AUTO buttons don't work as expected:**](https://github.com/hobyst/flmidi-kompletekontrol/issues/5) Quantize and toggling automation recording on/off isn't supported yet on the actual MIDI API scope. There's a workaround to get to the quantize buttons by getting into the menus and emulating key pressings but it's slow and buggy. Instead, they switch between windows (browser isn't included on this) and trigger full-screen plugin browser respectively.
 
 ## Special thanks
 

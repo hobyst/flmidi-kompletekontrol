@@ -34,6 +34,7 @@ if sys.platform == "darwin":
     print("macOS detected. Imported _dummy_thread module.")
     import lib._dummy_thread as _thread
 
+
 ######################################################################################################################
 # User-editable constants for script customization
 # Edit this ones to make the script act as you wish
@@ -84,15 +85,14 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
     # If the selected track belongs to the 16th group, it will declare the last two tracks as non existant
     # Otherwise, it will declare all as existant
     if trackGroup == 15:
-        for x in range(trackFirst, trackFirst + 8):
-            nihia.mixerSendInfo("EXIST", 0, value=1)
-            nihia.mixerSendInfo("EXIST", 1, value=1)
-            nihia.mixerSendInfo("EXIST", 2, value=1)
-            nihia.mixerSendInfo("EXIST", 3, value=1)
-            nihia.mixerSendInfo("EXIST", 4, value=1)
-            nihia.mixerSendInfo("EXIST", 5, value=1)
-            nihia.mixerSendInfo("EXIST", 6, value=0)
-            nihia.mixerSendInfo("EXIST", 7, value=0)
+        nihia.mixerSendInfo("EXIST", 0, value=1)
+        nihia.mixerSendInfo("EXIST", 1, value=1)
+        nihia.mixerSendInfo("EXIST", 2, value=1)
+        nihia.mixerSendInfo("EXIST", 3, value=1)
+        nihia.mixerSendInfo("EXIST", 4, value=1)
+        nihia.mixerSendInfo("EXIST", 5, value=1)
+        nihia.mixerSendInfo("EXIST", 6, value=0)
+        nihia.mixerSendInfo("EXIST", 7, value=0)
     
     else:
         for x in range(trackFirst, trackFirst + 8):
@@ -158,8 +158,8 @@ def updateMixerTracks(dataType: str, selectedTrack: int):
 
     # Checks the track group once more to clean up the last two tracks
     if trackGroup == 15:
-
         if dataType == "NAME":
+            nihia.mixerSendInfo("NAME", 6, info="")
             nihia.mixerSendInfo("NAME", 7, info="")
         
         # Track 7 --> Current
@@ -322,6 +322,39 @@ def updatePeak(selectedTrack: int):
 
     # Sends the values to the device
     nihia.mixerSendInfo("PEAK", 0, peakValues = peakList)
+
+
+def detectDevice():
+    """ Gets the MIDI device name from FL Studio and sets `DEVICE_SERIES` to the right value in order for the script to work properly. """
+
+    # Imports DEVICE_SERIES from the global scope
+    global DEVICE_SERIES
+
+    # Retrieves the device name from FL Studio
+    deviceName = device.getName()
+
+    # Saves the 22th character of the device name for the S-Series check to isolate the extraction and avoid errors stopping the execution of the script
+    char21 = None
+    try:
+        char21 = deviceName[21]
+    except:
+        char21 = None
+
+    # Sets DEVICE_NAME depending on the retrieved name
+    if deviceName == "Komplete Kontrol A DAW":
+        DEVICE_SERIES = "A_SERIES"
+        print("Detected device: Komplete Kontrol A-Series")
+    
+    elif deviceName == "Komplete Kontrol M DAW":
+        DEVICE_SERIES = "M_SERIES"
+        print("Detected device: Komplete Kontrol M-Series")
+    
+    elif char21 == "-":     # Gets the 18th char on the name to see if it matches the "Komplete Kontrol DAW - X" naming scheme S-Series devices follow
+        DEVICE_SERIES = "S_SERIES"
+        print("Detected device: Komplete Kontrol S-Series")
+    
+    else:
+        print("Device detection failed. Going with the manually specified device on the script:", DEVICE_SERIES)
 
 
 ######################################################################################################################
@@ -753,7 +786,9 @@ def OnMidiIn(event):
 ######################################################################################################################
 
 def OnInit():
-
+    # Detects the device the script is running on
+    detectDevice()
+    
     # Tells to FL Studio the device has peak meters
     device.setHasMeters()
 
