@@ -10,7 +10,7 @@ import general
 import launchMapPages
 import playlist
 import ui
-import plugins
+import plugin
 import channels
 
 import midi
@@ -930,10 +930,10 @@ def TOnRefresh(HW_Dirty_LEDs):
     #     nihia.mixerSendInfoSelected("SELECTED", "EMPTY")
 
     # Check if the selected plugin is a Komplete Kontrol instance
-    if (plugins.isValid(channels.channelNumber()) == True): # Checks if plugin exists
+    if (plugin.isValid(channels.channelNumber()) == True): # Checks if plugin exists
         # If it does, sends the instance ID
-        if plugins.getPluginName(channels.channelNumber()) == "Komplete Kontrol":
-            nihia.mixerSendInfo("KOMPLETE_INSTANCE", 0, info=plugins.getParamName(0, channels.channelNumber()))
+        if plugin.getPluginName(channels.channelNumber()) == "Komplete Kontrol":
+            nihia.mixerSendInfo("KOMPLETE_INSTANCE", 0, info=plugin.getParamName(0, channels.channelNumber()))
         
         # If it doesn't, tells the keyboard about it
         else:
