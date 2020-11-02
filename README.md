@@ -44,12 +44,6 @@ As of today, this script hasn't been tested on Maschine devices. However, some m
 
 ## Known issues
 
-- [**Performance issues on FL Studio 20.7.2 and up (Windows):**](https://github.com/hobyst/flmidi-kompletekontrol/issues/8) On FL Studio 20.7.2 and upwards, a bug was discovered that makes the script not to work sometimes and causes a performance drawback due to the constant error printing on the Script output. The only workaround for this is to reload the script if you notice any kind of performance issue. Go to `View > Script output > "the tab with the DAW device name on it"` and click on the `Reload script` button until the cascade stops and no errors seem to happen.
-
-- [**Automatic Komplete Kontrol instance switching:**](https://github.com/hobyst/flmidi-kompletekontrol/issues/3) It is already implemented in the compatibility layer, but the info that is needed from FL Studio to do so can't be gotten with the current API scope. Waiting for Image-Line to add plugin parameter read/write capabilities to the API for this.
-
-- [**Manual Komplete Kontrol instance switching:**](https://github.com/hobyst/flmidi-kompletekontrol/issues/4) In S-Series devices, DAW integration seems to disable the option to switch instances manually using the keyboard, relying on the host DAW to tell the device which instance to control. Due to the automatic instance switching not being compatible with FL Studio at the moment, it might be that the only way to change instances for S-Series users once the DAW integration has ben initiated is to do it manually with a mouse.
-
 - [**QUANTIZE and AUTO buttons don't work as expected:**](https://github.com/hobyst/flmidi-kompletekontrol/issues/5) Quantize and toggling automation recording on/off isn't supported yet on the actual MIDI API scope. There's a workaround to get to the quantize buttons by getting into the menus and emulating key pressings but it's slow and buggy. Instead, they switch between windows (browser isn't included on this) and trigger full-screen plugin browser respectively.
 
 ## Special thanks
