@@ -10,7 +10,7 @@ import general
 import launchMapPages
 import playlist
 import ui
-import plugin
+import plugins
 import channels
 
 import midi
@@ -615,6 +615,11 @@ def OnMidiIn(event):
     elif event.data1 == nihia.buttons.get("ENCODER_BUTTON"):
         event.handled = True
         ui.enter()
+    
+    # 4D Encoder button (shifted)
+    elif event.data1 == nihia.buttons.get("ENCODER_BUTTON_SHIFTED"):
+        event.handled = True
+        transport.globalTransport(midi.FPT_Menu, 1)
 
     # Knobs
     # Normal knobs - increase values
@@ -930,10 +935,10 @@ def TOnRefresh(HW_Dirty_LEDs):
     #     nihia.mixerSendInfoSelected("SELECTED", "EMPTY")
 
     # Check if the selected plugin is a Komplete Kontrol instance
-    if (plugin.isValid(channels.channelNumber()) == True): # Checks if plugin exists
+    if (plugins.isValid(channels.channelNumber()) == True): # Checks if plugin exists
         # If it does, sends the instance ID
-        if plugin.getPluginName(channels.channelNumber()) == "Komplete Kontrol":
-            nihia.mixerSendInfo("KOMPLETE_INSTANCE", 0, info=plugin.getParamName(0, channels.channelNumber()))
+        if plugins.getPluginName(channels.channelNumber()) == "Komplete Kontrol":
+            nihia.mixerSendInfo("KOMPLETE_INSTANCE", 0, info=plugins.getParamName(0, channels.channelNumber()))
         
         # If it doesn't, tells the keyboard about it
         else:
