@@ -615,6 +615,11 @@ def OnMidiIn(event):
     elif event.data1 == nihia.buttons.get("ENCODER_BUTTON"):
         event.handled = True
         ui.enter()
+    
+    # 4D Encoder button (shifted)
+    elif event.data1 == nihia.buttons.get("ENCODER_BUTTON_SHIFTED"):
+        event.handled = True
+        transport.globalTransport(midi.FPT_Menu, 1)
 
     # Knobs
     # Normal knobs - increase values
