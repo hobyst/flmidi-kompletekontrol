@@ -28,13 +28,7 @@ import math
 # Using _dummy_thread instead on macOS and _thread on Windows
 import sys
 
-if sys.platform == "win32":
-    print("Windows OS detected. Imported _thread module.")
-    import _thread
-
-if sys.platform == "darwin":
-    print("macOS detected. Imported _dummy_thread module.")
-    import lib._dummy_thread as _thread
+import lib._dummy_thread as _thread
 
 
 ######################################################################################################################
