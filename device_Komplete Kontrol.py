@@ -622,171 +622,27 @@ def OnMidiIn(event):
         transport.globalTransport(midi.FPT_Menu, 1)
 
     # Knobs
-    # Normal knobs - increase values
-    elif event.data1 == nihia.knobs.get("KNOB_1A") and event.data2 == nihia.knobs.get("INCREASE"):
+    # Normal knobs (volume adjustment)
+    elif nihia.knobs[0][0] <= event.data1 <= nihia.knobs[0][7]:
         event.handled = True
-        adjustMixer(0, "VOLUME", "INCREASE", mixer.trackNumber())
+        # Increase
+        if nihia.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.KNOB_INCREASE_MAX_SPEED:
+            adjustMixer(event.data1 - nihia.knobs[0][0], "VOLUME", "INCREASE", mixer.trackNumber())
+        
+        # Decrease
+        elif nihia.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.KNOB_DECREASE_MAX_SPEED:
+            adjustMixer(event.data1 - nihia.knobs[0][0], "VOLUME", "DECREASE", mixer.trackNumber())
     
-    elif event.data1 == nihia.knobs.get("KNOB_2A") and event.data2 == nihia.knobs.get("INCREASE"):
+    # Shifted knobs (pan adjustment)
+    elif nihia.knobs[1][0] <= event.data1 <= nihia.knobs[1][7]:
         event.handled = True
-        adjustMixer(1, "VOLUME", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_3A") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(2, "VOLUME", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_4A") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(3, "VOLUME", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_5A") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(4, "VOLUME", "INCREASE", mixer.trackNumber())
-    
-    elif event.data1 == nihia.knobs.get("KNOB_6A") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(5, "VOLUME", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_7A") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        # Handles track group 15 exception
-        if math.trunc(1/8 * mixer.trackNumber()) == 15:
-            return
-        else:    
-            adjustMixer(6, "VOLUME", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_8A") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        # Handles track group 15 exception
-        if math.trunc(1/8 * mixer.trackNumber()) == 15:
-            return
-        else: 
-            adjustMixer(7, "VOLUME", "INCREASE", mixer.trackNumber())
-    
-    # Normal knobs - decrease values
-    elif event.data1 == nihia.knobs.get("KNOB_1A") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(0, "VOLUME", "DECREASE", mixer.trackNumber())
-    
-    elif event.data1 == nihia.knobs.get("KNOB_2A") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(1, "VOLUME", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_3A") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(2, "VOLUME", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_4A") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(3, "VOLUME", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_5A") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(4, "VOLUME", "DECREASE", mixer.trackNumber())
-    
-    elif event.data1 == nihia.knobs.get("KNOB_6A") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(5, "VOLUME", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_7A") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        # Handles track group 15 exception
-        if math.trunc(1/8 * mixer.trackNumber()) == 15:
-            return
-        else: 
-            adjustMixer(6, "VOLUME", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_8A") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        # Handles track group 15 exception
-        if math.trunc(1/8 * mixer.trackNumber()) == 15:
-            return
-        else: 
-            adjustMixer(7, "VOLUME", "DECREASE", mixer.trackNumber())
-
-
-    
-    # Shifted knobs - increase values
-    elif event.data1 == nihia.knobs.get("KNOB_1B") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(0, "PAN", "INCREASE", mixer.trackNumber())
-    
-    elif event.data1 == nihia.knobs.get("KNOB_2B") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(1, "PAN", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_3B") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(2, "PAN", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_4B") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(3, "PAN", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_5B") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(4, "PAN", "INCREASE", mixer.trackNumber())
-    
-    elif event.data1 == nihia.knobs.get("KNOB_6B") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        adjustMixer(5, "PAN", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_7B") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        # Handles track group 15 exception
-        if math.trunc(1/8 * mixer.trackNumber()) == 15:
-            return
-        else: 
-            adjustMixer(6, "PAN", "INCREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("INCREASE"):
-        event.handled = True
-        # Handles track group 15 exception
-        if math.trunc(1/8 * mixer.trackNumber()) == 15:
-            return
-        else: 
-            adjustMixer(7, "PAN", "INCREASE", mixer.trackNumber())
-    
-    # Shifted knobs - decrease values
-    elif event.data1 == nihia.knobs.get("KNOB_1B") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(0, "PAN", "DECREASE", mixer.trackNumber())
-    
-    elif event.data1 == nihia.knobs.get("KNOB_2B") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(1, "PAN", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_3B") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(2, "PAN", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_4B") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(3, "PAN", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_5B") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(4, "PAN", "DECREASE", mixer.trackNumber())
-    
-    elif event.data1 == nihia.knobs.get("KNOB_6B") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        adjustMixer(5, "PAN", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_7B") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        # Handles track group 15 exception
-        if math.trunc(1/8 * mixer.trackNumber()) == 15:
-            return
-        else: 
-            adjustMixer(6, "PAN", "DECREASE", mixer.trackNumber())
-
-    elif event.data1 == nihia.knobs.get("KNOB_8B") and event.data2 == nihia.knobs.get("DECREASE"):
-        event.handled = True
-        # Handles track group 15 exception
-        if math.trunc(1/8 * mixer.trackNumber()) == 15:
-            return
-        else: 
-            adjustMixer(7, "PAN", "DECREASE", mixer.trackNumber())
+        # Increase
+        if nihia.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.KNOB_INCREASE_MAX_SPEED:
+            adjustMixer(event.data1 - nihia.knobs[1][0], "PAN", "INCREASE", mixer.trackNumber())
+        
+        # Decrease
+        elif nihia.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.KNOB_DECREASE_MAX_SPEED:
+            adjustMixer(event.data1 - nihia.knobs[1][0], "PAN", "DECREASE", mixer.trackNumber())
     
 ######################################################################################################################
 # Script logic
