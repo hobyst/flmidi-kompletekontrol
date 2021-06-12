@@ -10,6 +10,11 @@ def OnMidiIn(event):
         event.handled = False
         return
 
+    # Fixes aftertouch issue
+    elif event.status == 208:
+        event.handled = False
+        return
+
     # F4: Creates a new pattern and asks name for it
     elif event.data1 == 112:
         transport.globalTransport(midi.FPT_F4, 1)
