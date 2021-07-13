@@ -13,6 +13,11 @@ font {
     font-weight: 300;
 }
 
+.admonition{
+    font-weight: 300;
+    font-size: medium;
+}
+
 /* Set custom font */
 :root {
     --font-stack: "Oswald"
