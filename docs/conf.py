@@ -48,7 +48,8 @@ html_title = "Komplete Kontrol DAW Integration Script for FL Studio"    # Custom
 html_theme = 'furo'
 
 html_css_files = {
-    "custom.css"    # Custom CSS to load Oswald font directly from filesystem
+    "custom.css",    # Custom CSS to load Oswald font directly from filesystem
+    "text_elements.css"
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
