@@ -285,8 +285,8 @@ class Mixer:
 
         # Gets the 16 peak values that need to be reported to the device by building a list [peakL_0, peakR_0, peakL_1, peakR_1 ...]
         for x in range(self.trackFirst, self.trackFirst + self.trackLimit):
-            peakList[(x - trackFirst) * 2] = mixer.getTrackPeaks(x, midi.PEAK_L)
-            peakList[(x - trackFirst) * 2 + 1] = mixer.getTrackPeaks(x, midi.PEAK_R)
+            peakList[(x - self.trackFirst) * 2] = mixer.getTrackPeaks(x, midi.PEAK_L)
+            peakList[(x - self.trackFirst) * 2 + 1] = mixer.getTrackPeaks(x, midi.PEAK_R)
         
         # Updates peak values on the device
         nihia.mixer.sendPeakMeterData(peakList)
