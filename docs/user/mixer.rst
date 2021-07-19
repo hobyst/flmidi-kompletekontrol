@@ -56,3 +56,17 @@ A-Series and M32
 To mute or solo the currently selected track, hold SHIFT and press either ◀ or ▶ to reach the mute and solo buttons.
 
 These keyboards don't support mute or solo for multiple tracks at once like the S-Series MK2 does.
+
+Track selection
+===============
+
+S-Series MK2
+------------
+
+Use the buttons on top of the displays of the keyboard to select and deselect mixer tracks.
+
+A-Series and M32
+----------------
+
+These models don't support track selection. Only one track will be selected at a time and it will be the same
+that gets shown in the display.
