@@ -192,17 +192,17 @@ class Core:
 
             # Normal behavior if the action ID is between the desired range
             if self.window2 <= 68 and self.window2 != 67:
-                transport.globalTransport(window2, 1)
+                transport.globalTransport(self.window2, 1)
             
             # Skips the 67 value which calls the full screen plugin picker and calls the mixer instead
             elif self.window2 == 67:
                 self.window2 += 1
-                transport.globalTransport(window2, 1)
+                transport.globalTransport(self.window2, 1)
 
             # Once window value is out of range, it sets it again to the first value in range
             elif self.window2 > 68:
                 self.window2 = 64
-                transport.globalTransport(window2, 1)
+                transport.globalTransport(self.window2, 1)
 
 
         # Automation button
