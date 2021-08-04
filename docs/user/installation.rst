@@ -99,7 +99,7 @@ Requirements
 - If there are any standalone drivers for your device, download and install them as well.
 
 Download the script
-======================
+===================
 
 You can go to the `Releases <https://github.com/hobyst/flmidi-kompletekontrol/releases>`__ download to the ``Native-Instruments-Komplete-Kontrol.zip`` asset
 (as well as this manual) from the latest release and extract the ``.zip`` file on the FL Studio MIDI scripts folder inside your Image-Line User Data folder, located on:
@@ -222,7 +222,20 @@ Assign the script to the device inside FL Studio
 
    .. image:: ./_resources/installation/script-assignment-4.gif
 
-**Bonus for S-Series keyboards:** There should be a second MIDI script on the list called "Native Instruments Komplete Kontrol (S-Series Custom MIDI Map) (user)". You can link this script to the MIDI port of your keyboard (named "Komplete Kontrol - X") to use the white buttons at the top of the screen when the keyboard is on MIDI mode to trigger different actions inside FL Studio (you need to be using the default MIDI template from the Komplete Kontrol software in order for this optional script to work):
+S-Series Custom MIDI Map
+------------------------
+
+There should be a second MIDI script on the list called ``Native Instruments Komplete Kontrol (S-Series Custom MIDI Map) (user)``.
+You can assign this script to the MIDI device that represents the keyboard (named ``"KOMPLETE KONTROL - 1"``) to use the white buttons
+at the top of the screen when the keyboard is on MIDI mode to trigger different actions inside FL Studio 
+
+In order for this optional script to work, you will need to load the Komplete Kontrol software and change the settings of the MIDI template the keyboard
+is using to redirect all the white button pressings to the MIDI channel 16.
+
+.. note::
+  The script should catch all the MIDI messages coming from white button pressings without letting FL Studio interpret them as note messages.
+  If you experience any kind of weird behavior while using this script, just leave the MIDI device that represents the MIDI keyboard as a
+  ``(generic controller)`` to disable the script.
 
 ========= ============================================
   Button   Action                                    
