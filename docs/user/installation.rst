@@ -250,6 +250,17 @@ is using to redirect all the white button pressings to the MIDI channel 16.
  8th       Closes all windows        
 ========= ============================================
 
+Customizing the behavior of the script
+======================================
+
+Right in the same folder as the ``device_KompleteKontrol.py`` file, you will find a file named ``config.py`` which contains several
+settings that allow end-users to change the way the script behaves in some cases. Inside this file you will find instructions on what each
+setting does and how to change it.
+
+.. important::
+  Due to the recommended updating method being a clean install to ensure everything works properly, you will need to re-apply any modification
+  previously done to this file after an update of the script as every setting will be back to its default value because of the update.
+
 Updating the script
 ===================
 
