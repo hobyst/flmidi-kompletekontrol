@@ -269,7 +269,14 @@ class Core:
         # 4D Encoder button
         elif event.data1 == nihia.buttons.button_list.get("ENCODER_BUTTON"):
             event.handled = True
-            ui.enter()
+
+            # Open and close plugin window for the currently selected plugin on the channel rack
+            if ui.getFocused(midi.widChannelRack) == True:
+                channels.showEditor(channels.channelNumber(), 1)
+            elif ui.getFocused(5) == True:
+                channels.showEditor(channels.channelNumber(), 0)
+            else:
+                ui.enter()
         
         # 4D Encoder button (shifted)
         elif event.data1 == nihia.buttons.button_list.get("ENCODER_BUTTON_SHIFTED"):
