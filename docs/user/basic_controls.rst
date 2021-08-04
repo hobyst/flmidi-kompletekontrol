@@ -11,8 +11,8 @@ Basic controls
       :align: center
 
 .. note::
-  Any other buttons not listed here aren't available to DAW developers and they are hard locked just to be used with Komplete Kontrol
-  or Maschine.
+  Any other buttons not listed here are either documented in other sections of this manual or not available to DAW developers and locked just
+  to be used with Komplete Kontrol or Maschine.
 
 - :green:`PLAY:` Toogle play and pause (will lit up when playback is active)
 
