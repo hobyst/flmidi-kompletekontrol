@@ -31,69 +31,36 @@ import config
 import nihia.mixer
 
 class Track:
-    # Physical ID of the track, from 0 to 7
-    id = -1
-
-    # Equivalent of track index for the represented mixer track
-    index = -1
-
-    # Existence and/or track type of the track
-    exist = -1
-
-    # String to be displayed as the name of the track
-    name = ""
-    
-    # Number to be displayed as the volume of the track
-    vol = 0
-
-    # Number to be displayed as the panning of the track
-    pan = 0
-
-    # Armed for recording state
-    armed = 0
-
-    # Selection state
-    selected = 0
-
-    # Solo state
-    solo = 0
-
-    # Mute state
-    muted = 0
-
     def __init__(self, id: int):
         # Physical ID of the track, from 0 to 7
         self.id = id
 
         # Equivalent of track index for the represented mixer track
-        self.index = 0
+        self.index = None
 
         # Existence and/or track type of the track
         self.exist = 0
 
         # String to be displayed as the name of the track
-        self.name = ""
+        self.name = None
         
         # Number to be displayed as the volume of the track
-        self.vol = 0
+        self.vol = None
 
         # Number to be displayed as the panning of the track
-        self.pan = 0
+        self.pan = None
 
         # Armed for recording state
-        self.armed = 0
+        self.armed = None
 
         # Selection state
-        self.selected = 0
+        self.selected = None
 
         # Solo state
-        self.solo = 0
+        self.solo = None
 
         # Mute state
-        self.muted = 0
-
-        # Komplete Kontrol instance ID associated to the track
-        self.kompleteInstance = ""
+        self.muted = None
 
     def update(self, trackFirst):
         # Disable track if it doesn't exist
@@ -169,42 +136,28 @@ class Track:
         nihia.mixer.setTrackKompleteInstance(self.id, "")
 
 class Mixer:
-    # The mixer section, in groups of 8, that is being currently displayed on the device
-    trackGroup = -1
-
-    # The first track of the group
-    trackFirst = -1
-
-    # Amount of tracks being shown in the display (mainly used for peak value updates)
-    trackLimit = 8
-
-    # Initialise mixer tracks on loop and store them in tracks list 
-    tracks = []
-
-    # List of tracks that need to be updated
-    need_refresh = []
-
-    # Boolean to interface with OnDirtyMixerTracks
-    need_full_refresh = False
-
-    # Komplete Kontrol instance ID associated to the track
-    kompleteInstance = None
-
     def __init__(self):
         # The mixer section, in groups of 8, that is being currently displayed on the device
-        self.trackGroup = -1
+        self.trackGroup = None
 
         # The first track of the group
-        self.trackFirst = self.trackGroup * 8
+        self.trackFirst = None
 
         # Amount of tracks being shown in the display
         self.trackLimit = 8
 
         # Initialise mixer tracks on loop and store them in tracks list 
+        self.tracks = []
         self.tracks += [Track(x) for x in range(8)]
 
         # List of tracks that need to be updated
         self.need_refresh = []
+
+        # Variable to interface with OnDirtyMixerTrack with index -1
+        self.need_full_refresh = False
+
+        # Komplete Kontrol instance ID currently selected
+        self.kompleteInstance = None
 
     def whichTrackGroup(self, track: int) -> int:
         """ Function that calculates which track group has to be shown on screen by dividing 
@@ -266,15 +219,21 @@ class Mixer:
         self.need_refresh = []
 
         # Checks Komplete Kontrol instance
-        if (plugins.isValid(channels.channelNumber()) == True) and (plugins.getPluginName(channels.channelNumber()) == "Komplete Kontrol"): # Checks if plugin exists
-            if self.kompleteInstance != plugins.getParamName(0, channels.channelNumber()):
-                # If it does, updates the instance ID
-                self.kompleteInstance == plugins.getParamName(0, channels.channelNumber())
-                nihia.mixer.setTrackKompleteInstance(0, plugins.getParamName(0, channels.channelNumber()))
+        if plugins.isValid(channels.channelNumber()) == True:                                   # Checks if plugin exists
+            if plugins.getPluginName(channels.channelNumber()) == "Komplete Kontrol":           # Checks if plugin is Komplete Kontrol
+                if self.kompleteInstance != plugins.getParamName(0, channels.channelNumber()):  # Checks against cache and updates if necessary
+                    self.kompleteInstance == plugins.getParamName(0, channels.channelNumber())
+                    nihia.mixer.setTrackKompleteInstance(0, plugins.getParamName(0, channels.channelNumber()))
+            
+            else:
+                if self.kompleteInstance != "":  # Checks against cache and updates if necessary
+                    self.kompleteInstance == ""
+                    nihia.mixer.setTrackKompleteInstance(0, "")
 
         else:
-            self.kompleteInstance = ""
-            nihia.mixer.setTrackKompleteInstance(0, "")
+            if self.kompleteInstance != "":  # Checks against cache and updates if necessary
+                self.kompleteInstance == ""
+                nihia.mixer.setTrackKompleteInstance(0, "")
 
     def sendPeakInfo(self):
         """ Method to serially update peak meter values shown on the screen of S-Series MK2 devices. 
