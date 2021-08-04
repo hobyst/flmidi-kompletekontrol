@@ -424,17 +424,17 @@ class Core:
         else:
             if dataType == "VOLUME":
                 if action == "INCREASE":
-                    mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + config.KNOB_SENSITIVITY_VOL)
+                    mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + config.KNOB_INCREMENTS_VOL)
                 
                 elif action == "DECREASE":
-                    mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - config.KNOB_SENSITIVITY_VOL)
+                    mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - config.KNOB_INCREMENTS_VOL)
 
             elif dataType == "PAN":
                 if action == "INCREASE":
-                    mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) + config.KNOB_SENSITIVITY_PAN)
+                    mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) + config.KNOB_INCREMENTS_PAN)
 
                 elif action == "DECREASE":
-                    mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) - config.KNOB_SENSITIVITY_PAN)
+                    mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) - config.KNOB_INCREMENTS_PAN)
 
 class A_Series(Core):
     """ Controller code specific to A/M-Series keyboards. """

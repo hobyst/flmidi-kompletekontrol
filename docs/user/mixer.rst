@@ -36,10 +36,10 @@ track it controls on the device display, twist it to adjust volume and twist it 
         # These values set the amount of increments for each message your keyboard sends to FL Studio
         # when twisting the knobs on your device to change track volume and pan on the mixer
         # Defaults are:
-        # - KNOB_SENSITIVITY_VOL = 0.02
-        # - KNOB_SENSITIVITY_PAN = 0.02
-        KNOB_SENSITIVITY_VOL = 0.02
-        KNOB_SENSITIVITY_PAN = 0.02
+        # - KNOB_INCREMENTS_VOL = 0.02
+        # - KNOB_INCREMENTS_PAN = 0.02
+        KNOB_INCREMENTS_VOL = 0.02
+        KNOB_INCREMENTS_PAN = 0.02
 
 Mute and solo
 =============
