@@ -49,3 +49,7 @@ Basic controls
 - **PLUG-IN:** Changes the focus of the keyboard from DAW control mode to Komplete Kontrol mode.
 
 - **MIDI:** Changes to MIDI mode.
+
+- **4D Encoder:** It is mostly used for general navigation as both a directional pad and as a jog wheel. In the channel rack you can press it down like a button to
+  open and close the window of the currently selected plugin and on the playlist and piano roll you can spin it to change the position of the playback marker,
+  among other uses.
