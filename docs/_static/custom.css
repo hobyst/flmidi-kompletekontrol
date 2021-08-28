@@ -1,0 +1,24 @@
+/* Declare custom font */
+@font-face {
+    font-family: "Oswald";
+    src: url(fonts/Oswald.ttf) format("truetype-variations");
+}
+
+font {
+    font-family: "Oswald";
+}
+
+/* Set weights for custom font */
+.content {
+    font-weight: 300;
+}
+
+.admonition{
+    font-weight: 300;
+    font-size: medium;
+}
+
+/* Set custom font */
+:root {
+    --font-stack: "Oswald"
+}
