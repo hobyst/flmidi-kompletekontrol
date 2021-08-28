@@ -75,4 +75,3 @@ def settingsCheck():
             raise WrongDevice()
     else:
         return supportedDevices.get(device.getName())[0]
-
