@@ -222,7 +222,7 @@ class Mixer:
         if plugins.isValid(channels.channelNumber()) == True:                                   # Checks if plugin exists
             if plugins.getPluginName(channels.channelNumber()) == "Komplete Kontrol":           # Checks if plugin is Komplete Kontrol
                 if self.kompleteInstance != plugins.getParamName(0, channels.channelNumber()):  # Checks against cache and updates if necessary
-                    self.kompleteInstance == plugins.getParamName(0, channels.channelNumber())
+                    self.kompleteInstance = plugins.getParamName(0, channels.channelNumber())
                     nihia.mixer.setTrackKompleteInstance(0, plugins.getParamName(0, channels.channelNumber()))
             
             else:
