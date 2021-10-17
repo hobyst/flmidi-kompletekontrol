@@ -219,20 +219,20 @@ class Mixer:
         self.need_refresh = []
 
         # Checks Komplete Kontrol instance
-        if plugins.isValid(channels.channelNumber()) == True:                                   # Checks if plugin exists
-            if plugins.getPluginName(channels.channelNumber()) == "Komplete Kontrol":           # Checks if plugin is Komplete Kontrol
-                if self.kompleteInstance != plugins.getParamName(0, channels.channelNumber()):  # Checks against cache and updates if necessary
-                    self.kompleteInstance = plugins.getParamName(0, channels.channelNumber())
-                    nihia.mixer.setTrackKompleteInstance(0, plugins.getParamName(0, channels.channelNumber()))
+        if plugins.isValid(channels.selectedChannel()) == True:                                   # Checks if plugin exists
+            if plugins.getPluginName(channels.selectedChannel()) == "Komplete Kontrol":           # Checks if plugin is Komplete Kontrol
+                if self.kompleteInstance != plugins.getParamName(0, channels.selectedChannel()):  # Checks against cache and updates if necessary
+                    self.kompleteInstance = plugins.getParamName(0, channels.selectedChannel())
+                    nihia.mixer.setTrackKompleteInstance(0, plugins.getParamName(0, channels.selectedChannel()))
             
             else:
                 if self.kompleteInstance != "":  # Checks against cache and updates if necessary
-                    self.kompleteInstance == ""
+                    self.kompleteInstance = ""
                     nihia.mixer.setTrackKompleteInstance(0, "")
 
         else:
             if self.kompleteInstance != "":  # Checks against cache and updates if necessary
-                self.kompleteInstance == ""
+                self.kompleteInstance = ""
                 nihia.mixer.setTrackKompleteInstance(0, "")
 
     def sendPeakInfo(self):

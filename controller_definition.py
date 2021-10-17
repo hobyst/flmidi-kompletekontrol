@@ -272,9 +272,9 @@ class Core:
 
             # Open and close plugin window for the currently selected plugin on the channel rack
             if ui.getFocused(midi.widChannelRack) == True:
-                channels.showEditor(channels.channelNumber(), 1)
+                channels.showEditor(channels.selectedChannel(), 1)
             elif ui.getFocused(5) == True:
-                channels.showEditor(channels.channelNumber(), 0)
+                channels.showEditor(channels.selectedChannel(), 0)
             else:
                 ui.enter()
         
