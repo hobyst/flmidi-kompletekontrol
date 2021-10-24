@@ -1,5 +1,5 @@
 # name=Native Instruments Komplete Kontrol
-# url=https://github.com/hobyst/flmidi-kompletekontrol/wiki
+# url=https://forum.image-line.com/viewtopic.php?f=1994&t=233461
 
 # MIT License
 
