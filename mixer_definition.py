@@ -159,6 +159,10 @@ class Mixer:
         # Komplete Kontrol instance ID currently selected
         self.kompleteInstance = None
 
+        # Mute and solo status for the currently selected track (for MUTE and SOLO buttons LEDs)
+        self.isCurrentTrackMuted = None
+        self.isCurrentTrackSolo = None
+
     def whichTrackGroup(self, track: int) -> int:
         """ Function that calculates which track group has to be shown on screen by dividing 
         the mixer in groups of 8. 
@@ -208,8 +212,13 @@ class Mixer:
                 self.trackLimit = 8
 
         # Updates mute and solo status of the currently selected track (for MUTE and SOLO button lights)
-        nihia.mixer.setCurrentTrackMuted(mixer.isTrackMuted(mixer.trackNumber()))
-        nihia.mixer.setCurrentTrackSolo(mixer.isTrackSolo(mixer.trackNumber()))
+        if mixer.isTrackMuted(mixer.trackNumber()) != self.isCurrentTrackMuted:
+            self.isCurrentTrackMuted = mixer.isTrackMuted(mixer.trackNumber())
+            nihia.mixer.setCurrentTrackMuted(mixer.isTrackMuted(mixer.trackNumber()))
+        
+        if mixer.isTrackSolo(mixer.trackNumber()) != self.isCurrentTrackSolo:
+            self.isCurrentTrackSolo = mixer.isTrackSolo(mixer.trackNumber())
+            nihia.mixer.setCurrentTrackSolo(mixer.isTrackSolo(mixer.trackNumber()))
 
         # Updates scheduled tracks
         for x in range(len(self.need_refresh)):
