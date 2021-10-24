@@ -47,29 +47,30 @@ class Core:
         # Variable for the window change produced by the Quantize button (second implementation)
         self.window2 = 63
 
+        # Button light states
+        self.PLAY           = None
+        self.STOP           = None
+        self.REC            = None
+        self.COUNT_IN       = None
+        self.CLEAR          = None
+        self.LOOP           = None
+        self.METRO          = None
+        self.MUTE_SELECTED  = None
+        self.SOLO_SELECTED  = None
+
     def OnInit(self):
         # Activates the deep integration mode
         nihia.handShake()
-
-        # Sets the lights on
-        nihia.buttons.setLight("PLAY", 0)
-        nihia.buttons.setLight("REC", 0)
-        nihia.buttons.setLight("COUNT_IN", 0)
-        nihia.buttons.setLight("STOP", 0)
-        nihia.buttons.setLight("CLEAR", 1)
-        nihia.buttons.setLight("LOOP", 0)
-        nihia.buttons.setLight("METRO", 0)
-        nihia.buttons.setLight("UNDO", 1)
-        nihia.buttons.setLight("REDO", 1)
-        nihia.buttons.setLight("QUANTIZE", 1)
-        nihia.buttons.setLight("REDO", 1)
-        nihia.buttons.setLight("TEMPO", 1)
 
         # Additional controller-dependent code
         try:
             self.OnInitAdd()
         except:
             pass
+
+        # Update LEDs
+        self.OnRefresh(midi.HW_Dirty_LEDs)
+        self.OnRefresh(260)
 
         # Update mixer
         self.mixer.update()
@@ -318,73 +319,56 @@ class Core:
 
     def OnIdle(self):
         # Updates the LED of the CLEAR button (moved to OnIdle, since OnRefresh isn't called when focused window changes)
-        if ui.getFocused(midi.widPianoRoll) == True:
-            nihia.buttons.setLight("CLEAR", 1)
-        
-        elif ui.getFocused(midi.widPianoRoll) == False:
-            nihia.buttons.setLight("CLEAR", 0)
+        if ui.getFocused(midi.widPianoRoll) != self.CLEAR:
+            self.CLEAR = ui.getFocused(midi.widPianoRoll)
+            nihia.buttons.setLight("CLEAR", ui.getFocused(midi.widPianoRoll))
 
     def OnRefresh(self, flag):
-
         # LEDs update
         if flag == midi.HW_Dirty_LEDs:
             # PLAY button
-            if transport.isPlaying() == True:
-                nihia.buttons.setLight("PLAY", 1)
-            
-            elif transport.isPlaying() == False:
-                nihia.buttons.setLight("PLAY", 0)
+            if transport.isPlaying() != self.PLAY:
+                self.PLAY = transport.isPlaying()
+                nihia.buttons.setLight("PLAY", transport.isPlaying())
             
             # STOP button
-            if transport.isPlaying() == True:
-                nihia.buttons.setLight("STOP", 0)
-            
-            elif transport.isPlaying() == False:
-                nihia.buttons.setLight("STOP", 1)
-            
-            # REC button
-            if transport.isRecording() == True:
-                nihia.buttons.setLight("REC", 1)
-            
-            elif transport.isRecording() == False:
-                nihia.buttons.setLight("REC", 0)
+            if (not transport.isPlaying()) != self.STOP:
+                self.STOP =  (not transport.isPlaying())
+                nihia.buttons.setLight("STOP", (not transport.isPlaying()))
 
             # COUNT-IN button
-            if ui.isPrecountEnabled() == True:
-                nihia.buttons.setLight("COUNT_IN", 1)
-
-            elif ui.isPrecountEnabled() == False:
-                nihia.buttons.setLight("COUNT_IN", 0)
+            if ui.isPrecountEnabled() != self.COUNT_IN:
+                self.COUNT_IN = ui.isPrecountEnabled()
+                nihia.buttons.setLight("COUNT_IN", ui.isPrecountEnabled())
             
             # CLEAR button (moved to OnIdle, since OnRefresh isn't called when focused window changes)
 
             # LOOP button
-            if ui.isLoopRecEnabled() == True:
-                nihia.buttons.setLight("LOOP", 1)
-            
-            elif ui.isLoopRecEnabled() == False:
-                nihia.buttons.setLight("LOOP", 0)
+            if ui.isLoopRecEnabled() != self.LOOP:
+                self.LOOP = ui.isLoopRecEnabled()
+                nihia.buttons.setLight("LOOP", ui.isLoopRecEnabled())
 
             # METRO button
-            if ui.isMetronomeEnabled() == True:
-                nihia.buttons.setLight("METRO", 1)
-
-            elif ui.isMetronomeEnabled() == False:
-                nihia.buttons.setLight("METRO", 0)
+            if ui.isMetronomeEnabled() != self.METRO:
+                self.METRO = ui.isMetronomeEnabled()
+                nihia.buttons.setLight("METRO", ui.isMetronomeEnabled())
 
             # MUTE button
-            if mixer.isTrackMuted(mixer.trackNumber()) == True:
-                nihia.buttons.setLight("MUTE_SELECTED", 1)
-
-            elif mixer.isTrackMuted(mixer.trackNumber()) == False:
-                nihia.buttons.setLight("MUTE_SELECTED", 0)
+            if mixer.isTrackMuted(mixer.trackNumber()) != self.MUTE_SELECTED:
+                self.MUTE_SELECTED = mixer.isTrackMuted(mixer.trackNumber())
+                nihia.buttons.setLight("MUTE_SELECTED", mixer.isTrackMuted(mixer.trackNumber()))
             
             # SOLO button
-            if mixer.isTrackSolo(mixer.trackNumber()) == True:
-                nihia.buttons.setLight("SOLO_SELECTED", 1)
+            if mixer.isTrackSolo(mixer.trackNumber()) != self.SOLO_SELECTED:
+                self.SOLO_SELECTED = mixer.isTrackSolo(mixer.trackNumber())
+                nihia.buttons.setLight("SOLO_SELECTED", mixer.isTrackSolo(mixer.trackNumber()))
 
-            elif mixer.isTrackSolo(mixer.trackNumber()) == False:
-                nihia.buttons.setLight("SOLO_SELECTED", 0)
+        # Undocumented flag for recording state changes
+        elif flag == 260:
+            # REC button
+            if transport.isRecording() != self.REC:
+                self.REC = transport.isRecording()
+                nihia.buttons.setLight("REC", transport.isRecording())
 
         else:
             self.mixer.update()
