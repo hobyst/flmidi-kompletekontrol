@@ -329,12 +329,22 @@ class Core:
             # PLAY button
             if transport.isPlaying() != self.PLAY:
                 self.PLAY = transport.isPlaying()
-                nihia.buttons.setLight("PLAY", transport.isPlaying())
-            
+
+                # Handle transport.isPlaying() exception returning 2 when recording countdown is happening
+                if transport.isPlaying() == 2:
+                    nihia.buttons.setLight("PLAY", 0)
+                else:
+                    nihia.buttons.setLight("PLAY", transport.isPlaying())
+
             # STOP button
             if (not transport.isPlaying()) != self.STOP:
                 self.STOP =  (not transport.isPlaying())
-                nihia.buttons.setLight("STOP", (not transport.isPlaying()))
+
+                # Handle transport.isPlaying() exception returning 2 when recording countdown is happening
+                if transport.isPlaying() == 2:
+                    nihia.buttons.setLight("STOP", 0)
+                else:
+                    nihia.buttons.setLight("STOP", (not transport.isPlaying()))
 
             # COUNT-IN button
             if ui.isPrecountEnabled() != self.COUNT_IN:
