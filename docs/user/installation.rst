@@ -168,7 +168,7 @@ Indifferently of whatever installation method you used, the folder structure ins
 
 .. tip::
 
-		If the ``nihia`` folder is empty, then you got the wrong asset file from the Releases page or you run ``git clone``
+		If the ``nihia`` folder is empty, then you either got the wrong asset file from the Releases page or you run ``git clone``
 		without the ``--recursive`` argument.
 
 Assign the script to the device inside FL Studio
@@ -199,7 +199,7 @@ Assign the script to the device inside FL Studio
       to route MIDI between plugins.
 
    .. warning::
-      **The port number you assign to the keyboard cannot be shared with any other
+      **The port number you assign to the DAW control surface cannot be shared with any other
       MIDI device in the list.** Keep a port for each individual MIDI device you enable
       in FL Studio.
 

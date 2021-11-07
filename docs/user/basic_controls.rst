@@ -14,13 +14,13 @@ Basic controls
   Any other buttons not listed here are either documented in other sections of this manual or not available to DAW developers and locked just
   to be used with Komplete Kontrol or Maschine.
 
-- :green:`PLAY:` Toogle play and pause (will lit up when playback is active)
+- :green:`PLAY:` Toogle play and pause (will light up when playback is active)
 
 - :green:`Restart:` Toggle bewteen Pattern playback and Song playback
 
-- :red:`REC:` Toogle recording on/off (will lit up when enabled)
+- :red:`REC:` Toogle recording on/off (will light up when enabled)
 
-- :red:`Count-In:` Toggle "Countdown before recording" on/off (will lit up when enabled)
+- :red:`Count-In:` Toggle "Countdown before recording" on/off (will light up when enabled)
 
 - **STOP:** Stops playback and goes to the beginning of the song
 
@@ -28,7 +28,7 @@ Basic controls
 
 - **LOOP:** Toggle "Loop recording" on/off (lit up if enabled)
 
-- **METRO:** Toggle the metronome onn/off (lit up if enabled)
+- **METRO:** Toggle the metronome on/off (lit up if enabled)
 
 - **TEMPO:** Button for tempo tapping
 
