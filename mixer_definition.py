@@ -163,6 +163,9 @@ class Mixer:
         self.isCurrentTrackMuted = None
         self.isCurrentTrackSolo = None
 
+        # Peak meter values
+        self.previousPeakValues = []
+
     def whichTrackGroup(self, track: int) -> int:
         """ Function that calculates which track group has to be shown on screen by dividing 
         the mixer in groups of 8. 
@@ -255,9 +258,13 @@ class Mixer:
         for x in range(self.trackFirst, self.trackFirst + self.trackLimit):
             peakList[(x - self.trackFirst) * 2] = mixer.getTrackPeaks(x, midi.PEAK_L)
             peakList[(x - self.trackFirst) * 2 + 1] = mixer.getTrackPeaks(x, midi.PEAK_R)
-        
-        # Updates peak values on the device
-        nihia.mixer.sendPeakMeterData(peakList)
+
+        if peakList != self.previousPeakValues:
+            # Updates peak values on the cache
+            self.previousPeakValues = peakList
+
+            # Updates peak values on the device
+            nihia.mixer.sendPeakMeterData(peakList)
 
 def VolTodB(value: float):
 
