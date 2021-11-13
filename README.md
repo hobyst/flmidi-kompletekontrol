@@ -4,7 +4,7 @@ Implementation of the deep integration mode found on Native Instruments' Komplet
 
 This script aims to support all the features of this mode, offering the same features found on supported DAWs like Ableton Live or Logic Pro X.
 
-For installation know-how and info on how to use the script, head to the [documentation](./docs) folder of the repository or download the HTML manual from the assets of the [latest stable release](https://github.com/hobyst/flmidi-kompletekontrol/releases/latest).
+For installation know-how and info on how to use the script, download the HTML manual from the assets of the [latest stable release](https://github.com/hobyst/flmidi-kompletekontrol/releases/latest).
 
 ## Main features
 
