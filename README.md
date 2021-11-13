@@ -4,7 +4,7 @@ Implementation of the deep integration mode found on Native Instruments' Komplet
 
 This script aims to support all the features of this mode, offering the same features found on supported DAWs like Ableton Live or Logic Pro X.
 
-For installation know-how and info on how to use the script, go to the [wiki](https://github.com/hobyst/flmidi-kompletekontrol/wiki) of the repository.
+For installation know-how and info on how to use the script, head to the [documentation](./docs) folder of the repository or download the HTML manual from the assets of the [latest stable release](https://github.com/hobyst/flmidi-kompletekontrol/releases/latest).
 
 ## Main features
 
@@ -22,25 +22,12 @@ For installation know-how and info on how to use the script, go to the [wiki](ht
 
 - [x] Komplete Kontrol S49/61/88 MK2
 
-- [ ] Komplete Kontrol S25/49/61/88 MK1 (supposed to work as A-Series, not tested)
+- [ ] Komplete Kontrol S25/49/61/88 MK1 (incompatible, compatibility might be implemented in the future)
 
 ### Maschine
 
-As of today, this script hasn't been tested on Maschine devices. However, some might work due to their similarities in functionality with Komplete Kontrol keyboards.
-
-- [ ] Maschine MK3 (supposed to work as S-Series MK2, not tested)
-
-- [ ] Maschine Studio (supposed to work as S-Series MK2, not tested)
-
-- [ ] Maschine MK2
-
-- [ ] Maschine MK1
-
-- [ ] ~~Maschine Mikro MK3~~ (doesn't have DAW integration mode)
-
-- [ ] Maschine Mikro MK2
-
-- [ ] Maschine Mikro MK1
+Maschine devices use a different way to communicate with DAWs than how Komplete Kontrol
+keyboards do, therefore this script isn't compatible with them.
 
 ## Known issues
 
