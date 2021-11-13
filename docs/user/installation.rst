@@ -204,11 +204,11 @@ Assign the script to the device inside FL Studio
       in FL Studio.
 
    .. warning::
-      **Keep the MIDI keyboard unassigned from any port.** On Windows there's a bug related to
-      how MIDI devices are handled and assigning a port to the keyboard will result in an
-      "out of memory" error.
+      **Keep the MIDI device that represents MIDI keyboard unassigned from any port.** On 
+      Windows there's a bug related to how MIDI devices are handled and assigning a port 
+      to the keyboard will result in an "out of memory" error.
 
-      Even if it should only affect to Windows, macOS users are also encouraged to do the same.
+      Even if it should only affect Windows users, macOS users are also encouraged to do the same.
 
    .. image:: ./_resources/installation/script-assignment-2.gif
 
@@ -224,7 +224,13 @@ Assign the script to the device inside FL Studio
 
 After this, the configuration should look like this:
 
-.. table:: **A-Series and M-Series MIDI devices set up - Output**
+.. warning::
+  Do not use the "Send master sync" over any of the MIDI devices that come from the Komplete Kontrol keyboard.
+  If you see any of the MIDI devices from the keyboard with a ``SYNC`` flag on their status indicator, please
+  select the device on both input and output lists and disable the "Send master sync" over it.
+
+
+.. table:: **A-Series and M-Series MIDI devices setup - Output**
 
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | MIDI device name                      | Controller type                                   | Status    | Port    |
@@ -235,7 +241,7 @@ After this, the configuration should look like this:
   | ``KOMPLETE KONTROL <MODEL> MIDI``     | ``MIDI hardware port``                            |           |         |
   +---------------------------------------+---------------------------------------------------+-----------+---------+
 
-.. table:: **A-Series and M-Series MIDI devices set up - Input**
+.. table:: **A-Series and M-Series MIDI devices setup - Input**
 
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | MIDI device name                      | Controller type                                   | Status    | Port    |
@@ -248,7 +254,7 @@ After this, the configuration should look like this:
 
 |
 
-.. table:: **S-Series MK2 MIDI devices set up - Output**
+.. table:: **S-Series MK2 MIDI devices setup - Output**
 
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | MIDI device name                      | Controller type                                   | Status    | Port    |
@@ -258,7 +264,7 @@ After this, the configuration should look like this:
   | ``KOMPLETE KONTROL - 1``              | ``MIDI hardware port``                            |           |         |
   +---------------------------------------+---------------------------------------------------+-----------+---------+
 
-.. table:: **S-Series MK2 MIDI devices set up - Input**
+.. table:: **S-Series MK2 MIDI devices setup - Input**
 
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | MIDI device name                      | Controller type                                   | Status    | Port    |
@@ -272,7 +278,7 @@ S-Series Custom MIDI Map
 ------------------------
 
 There should be a second MIDI script on the list called ``Native Instruments Komplete Kontrol (S-Series Custom MIDI Map) (user)``.
-You can assign this script to the MIDI device that represents the keyboard (named ``"KOMPLETE KONTROL - 1"``) to use the white buttons
+You can assign this script to the MIDI device that represents the keyboard (named ``KOMPLETE KONTROL - 1``) to use the white buttons
 at the top of the screen when the keyboard is on MIDI mode to trigger different actions inside FL Studio 
 
 In order for this optional script to work, you will need to load the Komplete Kontrol software and change the settings of the MIDI template the keyboard
@@ -311,7 +317,7 @@ Updating the script
 ===================
 
 To update to a newer version of the script, just delete the ``Native Instruments Komplete Kontrol`` folder
-from the ``Hardware`` folder and install the new version following these same steps. Re-assigning the script
+from the ``Hardware`` folder and install the new version following the steps above. Re-assigning the script
 on the FL Studio MIDI settings shouldn't be necessary as the script paths will be exactly the same.
 
 .. _troubleshooting:
@@ -319,30 +325,41 @@ on the FL Studio MIDI settings shouldn't be necessary as the script paths will b
 Troubleshooting
 ===============
 
-- **Powercycle your device:** As simple or stupid it might appear to be, turning your device off and on might solve some problems in certain situations. Try it first before doing anything more if you have any problems:
+- **Powercycle your device:** As simple it might appear to be, turning your device off and on might solve some problems in certain situations. Try it first before doing anything more if you have any problems:
   
   - **S-Series:** These ones have a dedicated power on/off button on the back. Use it to turn your device off and back on.
   
   - **A-Series and M-Series:** These power on and off only by the USB power. To turn off and on your device, just unplug it from your PC and then plug it back.
   
-  - If this does nothing, try restarting your PC as well.
+  - If this does nothing, try restarting your PC as well. Sometimes the Native Instruments driver might fail or not work properly and a restart might be required to fix the issue.
 
-- **There's no DAW MIDI port (more typical on Windows, but might happen on macOS as well):** The DAW port is a virtual MIDI port created by the drivers of the keyboard when they detect a Komplete Keyboard connected. If it doesn't appear then it might be due to a corrupt driver install or an error on the initialization of the driver. Try to reboot your PC. If that doesn't work, then:
+- **There's no DAW MIDI port (more typical on Windows, but might happen on macOS as well):** The DAW port is a virtual MIDI port created by the drivers of the keyboard when they detect a Komplete Keyboard connected. If it doesn't appear then it might be due to a corrupt driver install or an error on the initialization of the driver. Try to reboot your PC. If that doesn't work, then follow these instructions:
   
-  - Disconnect any NI device from your PC
-  
-  - Go to the Windows Settings (or the Control Panel) and uninstall all of the Komplete Kontrol named elements on the Apps and Features list:
+  .. note::
+    macOS users will need to uninstall and reinstall Komplete Kontrol to fix the driver installation by following 
+    `this guide <https://support.native-instruments.com/hc/en-us/articles/210291865-How-to-Uninstall-Native-Instruments-Software-from-a-Mac-Computer>`__ 
+    from NI and deleting any Komplete Kontrol related file or folder on the paths at "Application Files" and "App-specific Data and Support Files".
+
+  - **Windows:**
     
-    .. image:: ./_resources/installation/troubleshooting-1.png
+    - Disconnect any NI device from your PC
+    
+    - Go to the Windows Settings (or the Control Panel) and uninstall all of the Komplete Kontrol named elements on the Apps and Features list:
+      
+      .. image:: ./_resources/installation/troubleshooting-1.png
+    
+    - Restart your computer
+    
+    - Run Native Access as an administrator and re-install Komplete Kontrol
+    
+    - Run Komplete Kontrol as an administrator to finalize the installation of the drivers
+    
+    - If you have an S-Series device, you might need to reinstall the standalone driver as well. You can download it from Native Instrument's `drivers catalog <https://www.native-instruments.com/en/support/downloads/drivers-other-files/>`__
+    
+    - Restart your PC once again
+    
+    - If the problem persists, contact Native Instruments to get technical support
   
-  - Restart your computer
-  
-  - Run Native Access as an administrator and re-install Komplete Kontrol
-  
-  - Run Komplete Kontrol as an administrator to finalize the installation of the drivers
-  
-  - If you have an S-Series device, you might need to reinstall the standalone driver as well. You can download it from Native Instrument's `drivers catalog <https://www.native-instruments.com/en/support/downloads/drivers-other-files/>`__
-  
-  - Restart your PC once again
-  
-  - If the problem persists, contact Native Instruments to get technical support
+  - **macOS:** macOS users need to uninstall and reinstall Komplete Kontrol to fix the driver installation by following
+    `this guide <https://support.native-instruments.com/hc/en-us/articles/210291865-How-to-Uninstall-Native-Instruments-Software-from-a-Mac-Computer>`__
+    from NI and deleting any Komplete Kontrol related file or folder on the paths at "Application Files" and "App-specific Data and Support Files".
