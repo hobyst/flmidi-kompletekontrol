@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Komplete Kontrol DAW Integration Script for FL Studio'
-copyright = '2021, Hobyst'
-author = 'Hobyst'
+copyright = '2021, Pablo Peral'
+author = 'Pablo Peral'
 
 
 # -- General configuration ---------------------------------------------------
