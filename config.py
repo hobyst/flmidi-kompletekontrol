@@ -40,3 +40,15 @@ COUNT_IN_BEHAVIOR = 0
 # - KNOB_INCREMENTS_PAN = 0.02
 KNOB_INCREMENTS_VOL = 0.02
 KNOB_INCREMENTS_PAN = 0.02
+
+# Quantize button behavior
+# - If set to 0 (default), it will serve as a quantize buttom for the notes the currently selected pattern and currently
+#   selected channel rack
+# - If set to 1, it will behave the way it did before the implementation of quantization in the MIDI scripting API
+#   and allow jumping between FL Studio windows
+QUANTIZE_BEHAVIOR = 0
+
+# Quantize mode (only matters if QUANTIZE_BEHAVIOR is set to 0)
+# - If set to 0, quantization will be applied to both start and end time of notes
+# - If set to 1 (default), quantization will be applied only to start time of notes
+QUANTIZE_MODE = 1

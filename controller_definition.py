@@ -168,8 +168,9 @@ class Core:
 
         
         # Quantize button
-        # TODO: Not implemented yet in FL Studio MIDI API
-        # 
+        elif (event.data1 == nihia.buttons.button_list.get("QUANTIZE")) and (config.QUANTIZE_BEHAVIOR == 0):
+            event.handled = True
+            channels.quickQuantize(channels.selectedChannel(), config.QUANTIZE_MODE)
         # Instead, it changes between FL windows
         # TODO: The code is correctly written, but the ui.showWindow() method has a bug that causes the Piano roll and Browser windows not to
         # appear when invoked. It has been said it should be fixed in a future update.
@@ -187,7 +188,7 @@ class Core:
         # -----------------------------------------------------------------------------------------------------------------------------------
         # 
         # Alternative implementation: Emulate the Fn buttons
-        elif event.data1 == nihia.buttons.button_list.get("QUANTIZE"):
+        elif (event.data1 == nihia.buttons.button_list.get("QUANTIZE")) and (config.QUANTIZE_BEHAVIOR == 1):
             event.handled = True
             self.window2 += 1
 
