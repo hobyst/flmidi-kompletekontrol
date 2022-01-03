@@ -40,7 +40,7 @@ class Track:
         self.index = None
 
         # Existence and/or track type of the track
-        self.exist = 0
+        self.exist = False
 
         # String to be displayed as the name of the track
         self.name = None
@@ -184,8 +184,17 @@ class Mixer:
 
     def update(self):
         # Schedules all tracks to be updated if trackGroup changes
-        if (self.whichTrackGroup(mixer.trackNumber()) != self.trackGroup) or (self.need_full_refresh == True):
+        if (self.need_full_refresh == True):
 
+            # Checks for the 15th group exception to limit track processing
+            if self.trackGroup == 15:
+                self.need_refresh = [0, 1, 2, 3, 4, 5]
+            else:
+                self.need_refresh = [0, 1, 2, 3, 4, 5, 6, 7]
+
+        # Schedules all tracks to be updated if trackGroup changes
+        if (self.whichTrackGroup(mixer.trackNumber()) != self.trackGroup):
+            
             self.trackGroup = self.whichTrackGroup(mixer.trackNumber())
             self.trackFirst = self.trackGroup * 8
 
@@ -215,7 +224,6 @@ class Mixer:
                 self.need_refresh = [0, 1, 2, 3, 4, 5, 6, 7]
                 self.trackLimit = 8
 
-        if (self.whichTrackGroup(mixer.trackNumber()) != self.trackGroup):
             # Updates FL Studio mixer rectangle halo
             ui.miDisplayRect(self.trackFirst, self.trackFirst + self.trackLimit - 1, midi.MaxInt)
 
