@@ -26,6 +26,7 @@ import plugins
 import channels
 import math
 import midi
+import ui
 
 import config
 import nihia.mixer
@@ -213,6 +214,10 @@ class Mixer:
                 # Limit track processing
                 self.need_refresh = [0, 1, 2, 3, 4, 5, 6, 7]
                 self.trackLimit = 8
+
+        if (self.whichTrackGroup(mixer.trackNumber()) != self.trackGroup):
+            # Updates FL Studio mixer rectangle halo
+            ui.miDisplayRect(self.trackFirst, self.trackFirst + self.trackLimit - 1, midi.MaxInt)
 
         # Updates mute and solo status of the currently selected track (for MUTE and SOLO button lights)
         if mixer.isTrackMuted(mixer.trackNumber()) != self.isCurrentTrackMuted:
