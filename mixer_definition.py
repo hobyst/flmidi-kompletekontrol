@@ -163,7 +163,7 @@ class Mixer:
         self.isCurrentTrackMuted = None
         self.isCurrentTrackSolo = None
 
-        # Peak meter values
+        # Peak meter values in 0-127 range
         self.previousPeakValues = []
 
     def whichTrackGroup(self, track: int) -> int:
@@ -258,6 +258,19 @@ class Mixer:
         for x in range(self.trackFirst, self.trackFirst + self.trackLimit):
             peakList[(x - self.trackFirst) * 2] = mixer.getTrackPeaks(x, midi.PEAK_L)
             peakList[(x - self.trackFirst) * 2 + 1] = mixer.getTrackPeaks(x, midi.PEAK_R)
+
+        # Performs 0-1.1 to 0-127 range conversion to make cache more conscious about actual changes regarding
+        # the information that the device actually utilizes
+        for x in range(0, 16):
+            # Makes the max of the peak meter on the device match the one on FL Studio (values that FL Studio gives seem to be infinite)
+            if peakList[x] > 1.1:
+                peakList[x] = 1.1
+        
+            # Translates the 0-1.1 range to 0-127 range
+            peakList[x] = peakList[x] * (127 / 1.1)
+        
+            # Truncates the possible decimals and declares the number as an integer to avoid errors in the translation of the data
+            peakList[x] = int(math.trunc(peakList[x]))
 
         if peakList != self.previousPeakValues:
             # Updates peak values on the cache
