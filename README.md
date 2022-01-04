@@ -29,10 +29,6 @@ For installation know-how and info on how to use the script, download the HTML m
 Maschine devices use a different way to communicate with DAWs than how Komplete Kontrol
 keyboards do, therefore this script isn't compatible with them.
 
-## Known issues
-
-- [**QUANTIZE and AUTO buttons don't work as expected:**](https://github.com/hobyst/flmidi-kompletekontrol/issues/5) Quantize and toggling automation recording on/off isn't supported yet on the actual MIDI API scope. There's a workaround to get to the quantize buttons by getting into the menus and emulating key pressings but it's slow and buggy. Instead, they switch between windows (browser isn't included on this) and trigger full-screen plugin browser respectively.
-
 ## Special thanks
 
 - [Duwayne Wright](https://github.com/soundwrightpro): Coding help
