@@ -55,6 +55,12 @@ class Core:
         self.CLEAR          = None
         self.LOOP           = None
         self.METRO          = None
+
+        self.UNDO           = None
+        self.REDO           = None
+        self.QUANTIZE       = None
+        self.AUTO           = None
+
         self.MUTE_SELECTED  = None
         self.SOLO_SELECTED  = None
 
@@ -71,6 +77,9 @@ class Core:
         # Update LEDs
         self.OnRefresh(midi.HW_Dirty_LEDs)
         self.OnRefresh(260)
+
+        nihia.buttons.setLight("QUANTIZE", 1)
+        nihia.buttons.setLight("AUTO", 0)
 
         # Update mixer
         self.mixer.update()
@@ -164,7 +173,7 @@ class Core:
         # Redo button
         elif event.data1 == nihia.buttons.button_list.get("REDO"):
             event.handled = True
-            general.undo()
+            general.undoDown()
 
         
         # Quantize button
@@ -364,6 +373,20 @@ class Core:
                 self.METRO = ui.isMetronomeEnabled()
                 nihia.buttons.setLight("METRO", ui.isMetronomeEnabled())
 
+            # UNDO button
+            if self.getUndoStatus() != self.UNDO:
+                self.UNDO = self.getUndoStatus()
+                nihia.buttons.setLight("UNDO", self.getUndoStatus())
+
+            # REDO button
+            if self.getRedoStatus() != self.REDO:
+                self.REDO = self.getRedoStatus()
+                nihia.buttons.setLight("REDO", self.getRedoStatus())
+
+            # QUANTIZE button is set on init and permanently on
+
+            # AUTO button is set on init and permanently on
+
             # MUTE button
             if mixer.isTrackMuted(mixer.trackNumber()) != self.MUTE_SELECTED:
                 self.MUTE_SELECTED = mixer.isTrackMuted(mixer.trackNumber())
@@ -430,6 +453,50 @@ class Core:
 
                 elif action == "DECREASE":
                     mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) - config.KNOB_INCREMENTS_PAN)
+
+    def getUndoStatus(self):
+        """ Helper function to set the light on the UNDO button. """
+
+        # general.getUndoHistoryPos() is broken, returning always the same result
+        # as general.getUndoHistoryCount()
+        # Function is a stub
+        """
+        undoLength = general.getUndoHistoryCount()
+        undoPosition = general.getUndoHistoryPos()
+
+        # In FL Studio, the first (most ancient) undo point in the history seems to have
+        # the greatest number and the entire history as an index of 1
+        if undoPosition == undoLength:
+            status = 0
+        else:
+            status = 1
+
+        return status
+        """
+
+        return 1
+
+    def getRedoStatus(self):
+        """ Helper function to set the light on the REDO button. """
+
+        # general.getUndoHistoryPos() is broken, returning always the same result
+        # as general.getUndoHistoryCount()
+        # Function is a stub
+        """
+        undoLength = general.getUndoHistoryCount()
+        undoPosition = general.getUndoHistoryPos()
+
+        # In FL Studio, the first (most ancient) undo point in the history seems to have
+        # the greatest number and the entire history as an index of 1
+        if general.getUndoHistoryPos() == 1:
+            status = 0
+        else:
+            status = 1
+        
+        return status
+        """
+
+        return 1
 
 class A_Series(Core):
     """ Controller code specific to A/M-Series keyboards. """
