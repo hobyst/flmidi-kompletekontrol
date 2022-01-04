@@ -34,7 +34,7 @@ Basic controls
 
 - **UNDO and REDO:** Self explanatory
 
-- **QUANTIZE:** Doesn't work (`see issue #5 <https://github.com/hobyst/flmidi-kompletekontrol/issues/5>`__). Instead, it switches between windows.
+- **QUANTIZE:** Applies quantization to notes on the currently selected pattern. For more information and configuration, please check the ``config.py`` file.
 
 - **AUTO:** Doesn't work (`see issue #5 <https://github.com/hobyst/flmidi-kompletekontrol/issues/5>`__). Instead, it shows the full-screen plugin browser.
 
