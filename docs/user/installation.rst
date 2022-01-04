@@ -87,12 +87,12 @@ Depending on the Komplete Kontrol device, the amount of MIDI devices and their n
 Requirements
 ============
 
-- FL Studio 20.8.3 or greater
+- FL Studio 20.9 or greater
 
-  - Released on March 31st, 2021
-  - Windows build 20.8.3.2304
-  - macOS build 20.8.3.1574
-  - MIDI Scripting API version 11
+  - Released on December 22nd, 2021
+  - Windows build 20.9.0.2748
+  - macOS build 20.9.0.2256
+  - MIDI Scripting API version 18
 
 - Komplete Kontrol 2.3.0 or greater
 - Download the latest firmware for your device on the `Drivers <https://www.native-instruments.com/en/support/downloads/drivers-other-files/>`__ page.
