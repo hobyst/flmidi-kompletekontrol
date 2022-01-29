@@ -68,5 +68,5 @@ def OnDirtyMixerTrack(index):
 def OnUpdateMeters():
     # Fix OnUpdateMeters getting called regardless of device.setHasMeters() being called
     # by the script in FL Studio 20.9
-    if type(keyboard) == controller_definition.S_SeriesMK2():
+    if type(keyboard) == type(controller_definition.S_SeriesMK2()):
         keyboard.OnUpdateMeters()
