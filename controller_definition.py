@@ -418,7 +418,7 @@ class Core:
     def OnUpdateMeters(self):           # Intended to be declared by child
         raise NotImplementedError()
 
-    def adjustMixer(self, knob: int, dataType: str, action: str, selectedTrack: int, sensitivity: int = None):
+    def adjustMixer(self, knob: int, dataType: str, action: str, selectedTrack: int, sensitivity: int):
         """ Dynamically maps the physical knob to the right mixer track depending on the track group the selected track belongs to, and adjusts the parameter.
         ### Parameters
 
@@ -429,6 +429,8 @@ class Core:
         - action: Can be INCREASE or DECREASE.
 
         - selectedTrack: The actual selected track that will be used to calculate the track group.
+
+        - sensitivity: The speed at which a knob gets turned.
         """
         # Calculates which track group the current track belongs to and truncates the value to get the exact number
         trackGroup = math.trunc(1/8 * selectedTrack)
