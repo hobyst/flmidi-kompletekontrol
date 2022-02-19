@@ -301,22 +301,22 @@ class Core:
             event.handled = True
             # Increase
             if nihia.mixer.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.mixer.KNOB_INCREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "INCREASE", mixer.trackNumber())
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "INCREASE", mixer.trackNumber(), event.data2)
             
             # Decrease
             elif nihia.mixer.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.mixer.KNOB_DECREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "DECREASE", mixer.trackNumber())
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "DECREASE", mixer.trackNumber(), event.data2)
         
         # Shifted knobs (pan adjustment)
         elif nihia.mixer.knobs[1][0] <= event.data1 <= nihia.mixer.knobs[1][7]:
             event.handled = True
             # Increase
             if nihia.mixer.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.mixer.KNOB_INCREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "INCREASE", mixer.trackNumber())
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "INCREASE", mixer.trackNumber(), event.data2)
             
             # Decrease
             elif nihia.mixer.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.mixer.KNOB_DECREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "DECREASE", mixer.trackNumber())
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "DECREASE", mixer.trackNumber(), event.data2)
         
         # Additional controller-dependent code
         try:
@@ -418,7 +418,7 @@ class Core:
     def OnUpdateMeters(self):           # Intended to be declared by child
         raise NotImplementedError()
 
-    def adjustMixer(self, knob: int, dataType: str, action: str, selectedTrack: int, sensitivity: float = None):
+    def adjustMixer(self, knob: int, dataType: str, action: str, selectedTrack: int, sensitivity: int = None):
         """ Dynamically maps the physical knob to the right mixer track depending on the track group the selected track belongs to, and adjusts the parameter.
         ### Parameters
 
@@ -436,15 +436,8 @@ class Core:
         # Multiplies the trackGroup to 8 to get the index of the first track of that group
         trackFirst = trackGroup * 8
 
-        # If you receive a sensitivity value, set it to a controllable value, else default to 1
-        if (sensitivity):
-            sensitivity = sensitivity / 15
-
-            # When decreasing the mixer knob, the amount that it changes is dramatically different than increasing.
-            if (action == "DECREASE"):
-                sensitivity = sensitivity / 10
-        else:
-            sensitivity = 1
+        # Convert the sensitivity value received by the knob to be a normalized multiplier
+        sensitivity = abs(-1 / (sensitivity - 64))
 
         if (trackGroup == 15) and (knob == 6 or knob == 7): # Control 15th group exception
             return
@@ -615,29 +608,6 @@ class S_SeriesMK2(Core):
             
             else:
                 ui.right()
-
-        # Speed-Sensitive Knobs
-        # Normal knobs (volume adjustment)
-        elif nihia.mixer.knobs[0][0] <= event.data1 <= nihia.mixer.knobs[0][7]:
-            event.handled = True
-            # Increase
-            if nihia.mixer.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.mixer.KNOB_INCREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "INCREASE", mixer.trackNumber(), event.data2)
-
-            # Decrease
-            elif nihia.mixer.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.mixer.KNOB_DECREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "DECREASE", mixer.trackNumber(), event.data2)
-
-        # Shifted knobs (pan adjustment)
-        elif nihia.mixer.knobs[1][0] <= event.data1 <= nihia.mixer.knobs[1][7]:
-            event.handled = True
-            # Increase
-            if nihia.mixer.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.mixer.KNOB_INCREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "INCREASE", mixer.trackNumber(), event.data2)
-
-            # Decrease
-            elif nihia.mixer.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.mixer.KNOB_DECREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "DECREASE", mixer.trackNumber(), event.data2)
 
     def OnUpdateMeters(self):
         self.mixer.sendPeakInfo()
