@@ -225,7 +225,8 @@ class Mixer:
                 self.trackLimit = 8
 
             # Updates FL Studio mixer rectangle halo
-            ui.miDisplayRect(self.trackFirst, self.trackFirst + self.trackLimit - 1, midi.MaxInt)
+            if config.MIXER_HALO_BEHAVIOR == 1:
+                ui.miDisplayRect(self.trackFirst, self.trackFirst + self.trackLimit - 1, midi.MaxInt)
 
         # Updates mute and solo status of the currently selected track (for MUTE and SOLO button lights)
         if mixer.isTrackMuted(mixer.trackNumber()) != self.isCurrentTrackMuted:

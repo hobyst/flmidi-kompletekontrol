@@ -52,3 +52,8 @@ QUANTIZE_BEHAVIOR = 0
 # - If set to 0, quantization will be applied to both start and end time of notes
 # - If set to 1 (default), quantization will be applied only to start time of notes
 QUANTIZE_MODE = 1
+
+# Mixer halo behavior 
+# - If set to 0, nothing will appear over the current group of tracks
+# - If set to 1 (default), a rectangle halo will appear over the current group of tracks
+MIXER_HALO_BEHAVIOR = 1
