@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2021 Pablo Peral
+# Copyright (c) 2024 Pablo Peral
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -226,7 +226,7 @@ class Mixer:
 
             # Updates FL Studio mixer rectangle halo
             if config.MIXER_HALO_BEHAVIOR == 1:
-                ui.miDisplayRect(self.trackFirst, self.trackFirst + self.trackLimit - 1, midi.MaxInt)
+                ui.miDisplayRect(self.trackFirst, self.trackFirst + self.trackLimit - 1, config.MIXER_HALO_TIME)
 
         # Updates mute and solo status of the currently selected track (for MUTE and SOLO button lights)
         if mixer.isTrackMuted(mixer.trackNumber()) != self.isCurrentTrackMuted:

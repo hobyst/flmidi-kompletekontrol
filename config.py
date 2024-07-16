@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2021 Pablo Peral
+# Copyright (c) 2024 Pablo Peral
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,9 @@
 """
 User-editable Python file to change script behavior.
 """
+
+import midi
+
 # Any line of this file starting with hashes (#) is a comment and won't be interpreted by FL Studio
 
 # Behavior of the Count-In button
@@ -57,3 +60,9 @@ QUANTIZE_MODE = 1
 # - If set to 0, nothing will appear over the current group of tracks
 # - If set to 1 (default), a rectangle halo will appear over the current group of tracks
 MIXER_HALO_BEHAVIOR = 1
+
+# Mixer halo time
+# Time in milliseconds the mixer halo rectangle will stay on screen after the last mixer track group change
+# Specify midi.MaxInt as value to make the mixer halo not disappear
+# Default value: 3000
+MIXER_HALO_TIME = 3000
