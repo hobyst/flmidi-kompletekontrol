@@ -13,7 +13,7 @@ Installation
 Introduction
 ============
 
-The Komplete Kontrol keyboards by themselves work just fine as a standard MIDI device on any device
+The Komplete Kontrol keyboards by themselves work just fine as a standard MIDI device with any device
 that supports MIDI over USB. But the deep integration features for DAWs require an additional MIDI device
 that is only created by the Native Instruments drivers that come bundled with the Komplete Kontrol software
 when they detect a keyboard has been connected to the host computer. In order to properly understand the
@@ -196,7 +196,7 @@ Assign the script to the device inside FL Studio
 
    .. note::
       These ports have nothing to do with the internal/virtual MIDI ports FL Studio uses
-      to route MIDI between plugins.
+      to route MIDI between plugin.
 
    .. warning::
       **The port number you assign to the DAW control surface cannot be shared with any other
@@ -218,7 +218,12 @@ Assign the script to the device inside FL Studio
    .. image:: ./_resources/installation/script-assignment-3.gif
 
 6. Finally, select the DAW device on both Input and Output lists, open the ``Controller type``
-   menu and select the ``Native Instruments Komplete Kontrol (user)`` script.
+   menu and select the ``Native Instruments Komplete Kontrol`` script.
+
+   .. warning::
+      **Pay attention to the names of the scripts.** ``Native Instruments Komplete Kontrol DAW`` and ``Native Instruments Komplete Kontrol MIDI``
+      are NOT a part of this integration. These two scripts are instead the official integration scripts offered by Image-Line in collaboration with
+      Native Instruments for S-Series MK2 and MK3, A-Series and M32 keyboards.
 
    .. image:: ./_resources/installation/script-assignment-4.gif
 
@@ -235,7 +240,7 @@ After this, the configuration should look like this:
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | MIDI device name                      | Controller type                                   | Status    | Port    |
   +=======================================+===================================================+===========+=========+
-  | ``Komplete Kontrol A DAW``            | ``Native Instruments Komplete Kontrol (user)``    | 🟢        | ``n``   |
+  | ``Komplete Kontrol A DAW``            | ``Native Instruments Komplete Kontrol``           | 🟢        | ``n``   |
   | or ``Komplete Kontrol M DAW``         |                                                   |           |         |
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | ``KOMPLETE KONTROL <MODEL> MIDI``     | ``MIDI hardware port``                            |           |         |
@@ -246,7 +251,7 @@ After this, the configuration should look like this:
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | MIDI device name                      | Controller type                                   | Status    | Port    |
   +=======================================+===================================================+===========+=========+
-  | ``Komplete Kontrol A DAW``            | ``Native Instruments Komplete Kontrol (user)``    | 🟢        | ``n``   |
+  | ``Komplete Kontrol A DAW``            | ``Native Instruments Komplete Kontrol``           | 🟢        | ``n``   |
   | or ``Komplete Kontrol M DAW``         |                                                   |           |         |
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | ``KOMPLETE KONTROL <MODEL> MIDI``     | ``(generic controller)``                          | 🟢        |         |
@@ -259,7 +264,7 @@ After this, the configuration should look like this:
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | MIDI device name                      | Controller type                                   | Status    | Port    |
   +=======================================+===================================================+===========+=========+
-  | ``Komplete Kontrol DAW - 1``          | ``Native Instruments Komplete Kontrol (user)``    | 🟢        | ``n``   |
+  | ``Komplete Kontrol DAW - 1``          | ``Native Instruments Komplete Kontrol``           | 🟢        | ``n``   |
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | ``KOMPLETE KONTROL - 1``              | ``MIDI hardware port``                            |           |         |
   +---------------------------------------+---------------------------------------------------+-----------+---------+
@@ -269,7 +274,7 @@ After this, the configuration should look like this:
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | MIDI device name                      | Controller type                                   | Status    | Port    |
   +=======================================+===================================================+===========+=========+
-  | ``Komplete Kontrol DAW - 1``          | ``Native Instruments Komplete Kontrol (user)``    | 🟢        | ``n``   |
+  | ``Komplete Kontrol DAW - 1``          | ``Native Instruments Komplete Kontrol``           | 🟢        | ``n``   |
   +---------------------------------------+---------------------------------------------------+-----------+---------+
   | ``KOMPLETE KONTROL - 1``              | ``(generic controller)``                          | 🟢        |         |
   +---------------------------------------+---------------------------------------------------+-----------+---------+
@@ -277,7 +282,7 @@ After this, the configuration should look like this:
 S-Series Custom MIDI Map
 ------------------------
 
-There should be a second MIDI script on the list called ``Native Instruments Komplete Kontrol (S-Series Custom MIDI Map) (user)``.
+There should be a second MIDI script on the list called ``Native Instruments Komplete Kontrol (S-Series Custom MIDI Map)``.
 You can assign this script to the MIDI device that represents the keyboard (named ``KOMPLETE KONTROL - 1``) to use the white buttons
 at the top of the screen when the keyboard is on MIDI mode to trigger different actions inside FL Studio 
 

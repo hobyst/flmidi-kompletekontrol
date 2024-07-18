@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Komplete Kontrol DAW Integration Script for FL Studio'
-copyright = '2021, Pablo Peral'
+copyright = '2024, Pablo Peral'
 author = 'Pablo Peral'
 
 
