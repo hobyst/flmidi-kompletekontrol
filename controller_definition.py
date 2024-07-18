@@ -301,22 +301,22 @@ class Core:
             event.handled = True
             # Increase
             if nihia.mixer.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.mixer.KNOB_INCREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "INCREASE", mixer.trackNumber())
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "INCREASE", mixer.trackNumber(), event.data2)
             
             # Decrease
             elif nihia.mixer.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.mixer.KNOB_DECREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "DECREASE", mixer.trackNumber())
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "DECREASE", mixer.trackNumber(), event.data2)
         
         # Shifted knobs (pan adjustment)
         elif nihia.mixer.knobs[1][0] <= event.data1 <= nihia.mixer.knobs[1][7]:
             event.handled = True
             # Increase
             if nihia.mixer.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.mixer.KNOB_INCREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "INCREASE", mixer.trackNumber())
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "INCREASE", mixer.trackNumber(), event.data2)
             
             # Decrease
             elif nihia.mixer.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.mixer.KNOB_DECREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "DECREASE", mixer.trackNumber())
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "DECREASE", mixer.trackNumber(), event.data2)
         
         # Additional controller-dependent code
         try:
@@ -418,7 +418,7 @@ class Core:
     def OnUpdateMeters(self):           # Intended to be declared by child
         raise NotImplementedError()
 
-    def adjustMixer(self, knob: int, dataType: str, action: str, selectedTrack: int):
+    def adjustMixer(self, knob: int, dataType: str, action: str, selectedTrack: int, sensitivity: int):
         """ Dynamically maps the physical knob to the right mixer track depending on the track group the selected track belongs to, and adjusts the parameter.
         ### Parameters
 
@@ -429,6 +429,8 @@ class Core:
         - action: Can be INCREASE or DECREASE.
 
         - selectedTrack: The actual selected track that will be used to calculate the track group.
+
+        - sensitivity: The speed at which a knob gets turned.
         """
         # Calculates which track group the current track belongs to and truncates the value to get the exact number
         trackGroup = math.trunc(1/8 * selectedTrack)
@@ -436,23 +438,26 @@ class Core:
         # Multiplies the trackGroup to 8 to get the index of the first track of that group
         trackFirst = trackGroup * 8
 
+        # Convert the sensitivity value received by the knob to be a normalized multiplier
+        sensitivity = abs(-1 / (sensitivity - 64))
+
         if (trackGroup == 15) and (knob == 6 or knob == 7): # Control 15th group exception
             return
 
         else:
             if dataType == "VOLUME":
                 if action == "INCREASE":
-                    mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + config.KNOB_INCREMENTS_VOL)
+                    mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) + (config.KNOB_INCREMENTS_VOL * sensitivity))
                 
                 elif action == "DECREASE":
-                    mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - config.KNOB_INCREMENTS_VOL)
+                    mixer.setTrackVolume(trackFirst + knob, mixer.getTrackVolume(trackFirst + knob) - (config.KNOB_INCREMENTS_VOL * sensitivity))
 
             elif dataType == "PAN":
                 if action == "INCREASE":
-                    mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) + config.KNOB_INCREMENTS_PAN)
+                    mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) + (config.KNOB_INCREMENTS_PAN * sensitivity))
 
                 elif action == "DECREASE":
-                    mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) - config.KNOB_INCREMENTS_PAN)
+                    mixer.setTrackPan(trackFirst + knob, mixer.getTrackPan(trackFirst + knob) - (config.KNOB_INCREMENTS_PAN * sensitivity))
 
     def getUndoStatus(self):
         """ Helper function to set the light on the UNDO button. """
