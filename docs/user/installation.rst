@@ -22,8 +22,8 @@ to identify them in order to get the script working.
 
 MIDI keyboard
 	This MIDI device is created by the keyboard itself and will appear in any device and OS
-	compatible with MIDI over USB. This device represents the lower half of the keyboard inlcuding keypressings,
-	mod and pitch wheels, the touchstrip (S-Series) and the knobs in MIDI mode.
+	compatible with MIDI over USB. This device represents the lower half of the keyboard including key presses,
+	mod and pitch wheels, the touch strip (S-Series) and the knobs in MIDI mode.
 
 DAW control surface
 	This MIDI device is created by the Native Instruments drivers when a Komplete Kontrol keyboard is detected.

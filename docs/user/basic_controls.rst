@@ -14,11 +14,11 @@ Basic controls
   Any other buttons not listed here are either documented in other sections of this manual or not available to DAW developers and locked just
   to be used with Komplete Kontrol or Maschine.
 
-- :green:`PLAY:` Toogle play and pause (will light up when playback is active)
+- :green:`PLAY:` Toggle play and pause (will light up when playback is active)
 
-- :green:`Restart:` Toggle bewteen Pattern playback and Song playback
+- :green:`Restart:` Toggle between Pattern playback and Song playback
 
-- :red:`REC:` Toogle recording on/off (will light up when enabled)
+- :red:`REC:` Toggle recording on/off (will light up when enabled)
 
 - :red:`Count-In:` Toggle "Countdown before recording" on/off (will light up when enabled)
 
