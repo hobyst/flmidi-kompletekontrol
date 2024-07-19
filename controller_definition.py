@@ -301,22 +301,22 @@ class Core:
             event.handled = True
             # Increase
             if nihia.mixer.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.mixer.KNOB_INCREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "INCREASE", mixer.trackNumber(), event.data2)
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "INCREASE", mixer.trackNumber(), self.normalizeKnobSpeed(event.data2))
             
             # Decrease
             elif nihia.mixer.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.mixer.KNOB_DECREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "DECREASE", mixer.trackNumber(), event.data2)
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[0][0], "VOLUME", "DECREASE", mixer.trackNumber(), self.normalizeKnobSpeed(event.data2))
         
         # Shifted knobs (pan adjustment)
         elif nihia.mixer.knobs[1][0] <= event.data1 <= nihia.mixer.knobs[1][7]:
             event.handled = True
             # Increase
             if nihia.mixer.KNOB_INCREASE_MIN_SPEED <= event.data2 <= nihia.mixer.KNOB_INCREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "INCREASE", mixer.trackNumber(), event.data2)
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "INCREASE", mixer.trackNumber(), self.normalizeKnobSpeed(event.data2))
             
             # Decrease
             elif nihia.mixer.KNOB_DECREASE_MIN_SPEED >= event.data2 >= nihia.mixer.KNOB_DECREASE_MAX_SPEED:
-                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "DECREASE", mixer.trackNumber(), event.data2)
+                self.adjustMixer(event.data1 - nihia.mixer.knobs[1][0], "PAN", "DECREASE", mixer.trackNumber(), self.normalizeKnobSpeed(event.data2))
         
         # Additional controller-dependent code
         try:
@@ -418,7 +418,27 @@ class Core:
     def OnUpdateMeters(self):           # Intended to be declared by child
         raise NotImplementedError()
 
-    def adjustMixer(self, knob: int, dataType: str, action: str, selectedTrack: int, sensitivity: int):
+    def normalizeKnobSpeed(self, speed: int) -> float:
+        """
+        Normalize the speed value specified by the keyboard when turning a knob.
+
+        The speed values sent by the keyboard specify the speed at which the knob is being turned to in a
+        range of either 64 or 63 steps depending on the direction. This function normalizes the integer value sent by
+        the keyboard into a 0 (min speed) to 1 (max speed) float value that can be used to properly determine the
+        offsets to use when modifying parameters depending on the speed the knob is being turned at.
+
+        ### Parameters
+
+        - speed: From 0 to 127. The speed value reported by the keyboard.
+
+        ### Returns
+
+        Float value representing the proper sensitivity multiplier corresponding to the speed the knob is being turned at.
+        """
+        # Convert the speed value received by the knob to be a normalized sensitivity multiplier
+        return abs(-1 / (speed - 64))
+
+    def adjustMixer(self, knob: int, dataType: str, action: str, selectedTrack: int, sensitivity: float):
         """ Dynamically maps the physical knob to the right mixer track depending on the track group the selected track belongs to, and adjusts the parameter.
         ### Parameters
 
@@ -430,16 +450,13 @@ class Core:
 
         - selectedTrack: The actual selected track that will be used to calculate the track group.
 
-        - sensitivity: The speed at which a knob gets turned.
+        - sensitivity: From 0 (minimum) to 1 (maximum). The greater the sensitivity, the greater will be the modification of the desired parameter.
         """
         # Calculates which track group the current track belongs to and truncates the value to get the exact number
         trackGroup = math.trunc(1/8 * selectedTrack)
 
         # Multiplies the trackGroup to 8 to get the index of the first track of that group
         trackFirst = trackGroup * 8
-
-        # Convert the sensitivity value received by the knob to be a normalized multiplier
-        sensitivity = abs(-1 / (sensitivity - 64))
 
         if (trackGroup == 15) and (knob == 6 or knob == 7): # Control 15th group exception
             return
