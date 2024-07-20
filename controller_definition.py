@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2021 Pablo Peral
+# Copyright (c) 2024 Pablo Peral
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -585,12 +585,17 @@ class S_SeriesMK2(Core):
         # Mute button - S-Series
         if event.data1 == nihia.buttons.button_list.get("MUTE"):
             event.handled = True
-            self.mixerMuteSoloHandler("MUTE", event.data2, mixer.trackNumber())
+            self.mixerCommandHandler("MUTE", event.data2, mixer.trackNumber())
 
         # Solo button - S-Series
         elif event.data1 == nihia.buttons.button_list.get("SOLO"):
             event.handled = True
-            self.mixerMuteSoloHandler("SOLO", event.data2, mixer.trackNumber())
+            self.mixerCommandHandler("SOLO", event.data2, mixer.trackNumber())
+
+        # Track selection (top white buttons) - S-Series
+        elif event.data1 == nihia.buttons.button_list.get("TRACK_SELECT"):
+            event.handled = True
+            self.mixerCommandHandler("TRACK_SELECTION", event.data2, mixer.trackNumber())
         
         # 4D Encoder up
         elif event.data1 == nihia.buttons.button_list.get("ENCODER_Y_S") and event.data2 == nihia.buttons.button_list.get("UP"):
@@ -631,11 +636,11 @@ class S_SeriesMK2(Core):
     def OnUpdateMeters(self):
         self.mixer.sendPeakInfo()
 
-    def mixerMuteSoloHandler(self, action: str, targetTrack: int, selectedTrack: int):
-        """ Handles the way mixer and solo commands are sent from S-Series keyboards. 
+    def mixerCommandHandler(self, action: str, targetTrack: int, selectedTrack: int):
+        """ Handles the way mute, solo and track selection commands are sent from S-Series keyboards. 
         ### Parameters
         
-        - action: MUTE or SOLO.
+        - action: MUTE, SOLO or TRACK_SELECTION.
         - targetTrack: From 0 to 7, the track that the user is trying to mute or solo from the ones showing on the device's mixer.
         - selectedTrack: The currently selected track that is used to calculate the track group.
         """
@@ -651,3 +656,6 @@ class S_SeriesMK2(Core):
 
         elif action == "SOLO":
             mixer.soloTrack(trackFirst + targetTrack)
+
+        elif action == "TRACK_SELECTION":
+            mixer.selectTrack(trackFirst + targetTrack)
