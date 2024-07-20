@@ -134,7 +134,6 @@ class Track:
         nihia.mixer.setTrackSel(self.id, 0)
         nihia.mixer.setTrackSolo(self.id, 0)
         nihia.mixer.setTrackMute(self.id, 0)
-        nihia.mixer.setTrackKompleteInstance(self.id, "")
 
 class Mixer:
     def __init__(self):
@@ -249,17 +248,17 @@ class Mixer:
             if plugins.getPluginName(channels.selectedChannel()) == "Komplete Kontrol":           # Checks if plugin is Komplete Kontrol
                 if self.kompleteInstance != plugins.getParamName(0, channels.selectedChannel()):  # Checks against cache and updates if necessary
                     self.kompleteInstance = plugins.getParamName(0, channels.selectedChannel())
-                    nihia.mixer.setTrackKompleteInstance(0, plugins.getParamName(0, channels.selectedChannel()))
+                    nihia.mixer.setKompleteInstance(plugins.getParamName(0, channels.selectedChannel()))
             
             else:
                 if self.kompleteInstance != "":  # Checks against cache and updates if necessary
                     self.kompleteInstance = ""
-                    nihia.mixer.setTrackKompleteInstance(0, "")
+                    nihia.mixer.setKompleteInstance("")
 
         else:
             if self.kompleteInstance != "":  # Checks against cache and updates if necessary
                 self.kompleteInstance = ""
-                nihia.mixer.setTrackKompleteInstance(0, "")
+                nihia.mixer.setKompleteInstance("")
 
     def sendPeakInfo(self):
         """ Method to serially update peak meter values shown on the screen of S-Series MK2 devices. 
