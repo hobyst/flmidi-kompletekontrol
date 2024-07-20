@@ -55,6 +55,7 @@ class Core:
         self.CLEAR          = None
         self.LOOP           = None
         self.METRO          = None
+        self.TEMPO          = None
 
         self.UNDO           = None
         self.REDO           = None
@@ -80,6 +81,7 @@ class Core:
 
         nihia.buttons.setLight("QUANTIZE", 1)
         nihia.buttons.setLight("AUTO", 0)
+        nihia.buttons.setLight("TEMPO", 1)
 
         # Update mixer
         self.mixer.update()
